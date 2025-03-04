@@ -27,7 +27,7 @@ async function askQuestion(question: string): Promise<string | null> {
     return response.choices[0].message.content;
 }
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest): Promise<NextResponse> {
     const query = await req.nextUrl.searchParams.get("question");
     const message = await askQuestion(query || "");
     return NextResponse.json({ message });
