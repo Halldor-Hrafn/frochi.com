@@ -1,12 +1,11 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import OpenAI from "openai";
-import { NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 type ResponseData = {
     message: string | null
 }
 
-async function askQuestion(): Promise<string | null> {
+async function askQuestion(question: string): Promise<string | null> {
     console.log("Creating OpenAI stuff");
     const openai = new OpenAI({
         baseURL: "https://openrouter.ai/api/v1",
@@ -19,7 +18,7 @@ async function askQuestion(): Promise<string | null> {
         messages: [
             {
                 role: "user",
-                content: "What is the meaning of life?"
+                content: question
             }
         ]
     });
@@ -28,12 +27,8 @@ async function askQuestion(): Promise<string | null> {
     return response.choices[0].message.content;
 }
 
-export async function GET() {
-    const message = await askQuestion();
+export async function GET(req: NextRequest, res: NextResponse) {
+    const query = await req.nextUrl.searchParams.get("question");
+    const message = await askQuestion(query || "");
     return NextResponse.json({ message });
-}
-
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
-    res.setHeader("Allow", ["GET"]);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
 }
