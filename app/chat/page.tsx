@@ -1,9 +1,27 @@
 "use client";
 import { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
 
 export default function Page() {
     const [messages, setMessages] = useState("");
     const [input, setInput] = useState("");
+
+    const [userId, setUserId] = useState("");
+
+    const supabase = createClient();
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error) {
+                console.error(error);
+                return;
+            } else {
+                setUserId(user?.id || "");
+            }
+        };
+        fetchUser();
+    }, []);
 
     // useEffect(() => {
     //     const fetchMessage = async () => {
@@ -23,7 +41,12 @@ export default function Page() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const response = await fetch(`/api/question?question=${encodeURIComponent(input)}`, {
+            const params = new URLSearchParams({
+                question: input,
+                userId: userId || ""
+            });
+
+            const response = await fetch(`/api/question?question=${params.toString()}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
@@ -53,6 +76,7 @@ export default function Page() {
                 <input type="text" value={input} onChange={handleInputChange} />
                 <button type="submit">Send</button>
             </form>
+            {userId && <p>User ID: {userId}</p>}
         </div>
     )
 }
