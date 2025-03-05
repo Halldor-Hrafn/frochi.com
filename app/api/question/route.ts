@@ -52,6 +52,21 @@ async function storeQuestion(question: string, userId: string, message: string):
     }
 }
 
+async function getMessages(userId: string): Promise<string> {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("chats")
+        .select("message, response")
+        .eq("user_id", userId);
+
+    if (error) {
+        console.error(error);
+        return "";
+    }
+
+    return data.map((chat: any) => `${chat.message} - ${chat.response}`).join("\n");
+}
+
 // export async function GET(req: NextRequest): Promise<NextResponse> {
 //     console.log("Handling GET request");
 //     const question = await req.nextUrl.searchParams.get("question");
