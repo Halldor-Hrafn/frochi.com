@@ -41,16 +41,15 @@ export default function Page() {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const params = new URLSearchParams({
-                question: input,
-                userId: userId || ""
-            });
-
-            const response = await fetch(`/api/question?question=${params.toString()}`, {
-                method: "GET",
+            const response = await fetch(`/api/question`, {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json"
-                }
+                },
+                body: JSON.stringify({
+                    question: input,
+                    userId: userId || ""
+                })
             });
 
             if (!response.ok) {

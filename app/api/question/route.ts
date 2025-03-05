@@ -52,9 +52,17 @@ async function storeQuestion(question: string, userId: string, message: string):
     }
 }
 
-export async function GET(req: NextRequest): Promise<NextResponse> {
-    const question = await req.nextUrl.searchParams.get("question");
-    const userId = await req.nextUrl.searchParams.get("userId");
-    const message = await askQuestion(question || "", userId || "");
+// export async function GET(req: NextRequest): Promise<NextResponse> {
+//     console.log("Handling GET request");
+//     const question = await req.nextUrl.searchParams.get("question");
+//     const userId = await req.nextUrl.searchParams.get("userId");
+//     const message = await askQuestion(question || "", userId || "");
+//     return NextResponse.json({ message });
+// }
+
+export async function POST(req: NextRequest): Promise<NextResponse> {
+    console.log("Handling POST request");
+    const { question, userId } = await req.json();
+    const message = await askQuestion(question, userId);
     return NextResponse.json({ message });
 }
