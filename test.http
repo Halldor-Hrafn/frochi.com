@@ -1,0 +1,1 @@
+GET http://localhost:3000/api/question?userId=1b5b48bd-0bf6-4c55-bd29-96c58b4a487f

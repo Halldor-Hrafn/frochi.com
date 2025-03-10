@@ -3,11 +3,11 @@ import { createClient } from "@/utils/supabase/server";
 import {create} from "node:domain";
 
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json(await getAllPosts());
 }
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest): Promise<NextResponse> {
     const { heading, content, user_id } = await req.json();
     if (!heading || !content) {
         return new NextResponse(JSON.stringify({ error: "missing fields" }), {
