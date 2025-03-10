@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
-import { Post as PostType } from "@/lib/types";
-import { Post } from "@/components/ui/post";
+import React, {useEffect, useState} from "react";
+import {createClient} from "@/utils/supabase/client";
+import {Post as PostType} from "@/lib/types";
+import {Post} from "@/components/ui/post";
 
 export default function Page() {
     const [posts, setPosts] = useState<PostType[]>([]);
@@ -17,7 +17,7 @@ export default function Page() {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const { data: { user }, error } = await supabase.auth.getUser();
+            const {data: {user}, error} = await supabase.auth.getUser();
             if (error) {
                 console.error(error);
                 return;
@@ -52,7 +52,7 @@ export default function Page() {
         const filePath = `uploads/${fileName}`;
 
         setUploading(true);
-        const { data, error } = await supabase.storage.from("post-images").upload(filePath, file);
+        const {data, error} = await supabase.storage.from("post-images").upload(filePath, file);
         setUploading(false);
 
         if (error) {
@@ -95,14 +95,14 @@ export default function Page() {
             }
 
             setPosts((old) => [
-                ...old,
                 {
                     heading: headingInput,
                     contents: contentInput,
                     owner_id: userId,
                     created_at: new Date().toISOString(),
                     image_url: imageUrl
-                }
+                },
+                ...old
             ]);
 
             setHeadingInput("");
@@ -133,7 +133,7 @@ export default function Page() {
                 />
 
                 <label htmlFor="file-inp">Upload Image</label>
-                <input type="file" id="file-inp" onChange={handleFileChange} accept="image/*" />
+                <input type="file" id="file-inp" onChange={handleFileChange} accept="image/*"/>
 
                 <button type="submit" disabled={uploading}>
                     {uploading ? "Uploading..." : "Post"}
@@ -143,7 +143,7 @@ export default function Page() {
             {userId && <p>User ID: {userId}</p>}
 
             {posts.map((post: PostType, idx: number) => (
-                <Post key={idx} post={post} />
+                <Post key={idx} post={post}/>
             ))}
         </div>
     );
