@@ -12,6 +12,9 @@ export function Post({post}: {post: PostType }) {
             <p className={'text-sm'}>{getPostTimeStr()} </p>
             <h2 className={'text-3xl border-b-gray-400 border-b-2'}>{post.heading}</h2>
             <p className={'text-gray-400'}>{post.contents}</p>
+            {post.image_url && (
+                <img src={post.image_url} alt="post image"/>
+            )}
         </div>
     )
 }
