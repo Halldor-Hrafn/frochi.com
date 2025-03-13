@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import type { MarkerData } from "@/lib/types";
 import { LatLng, LeafletMouseEvent } from "leaflet";
 import NewEventForm from "@/components/new-event-form";
-import { Button } from "@/components/ui/button"; // Assuming you have a button component
+import { Button } from "@/components/ui/button";
+import {CirclePlus} from "lucide-react"; // Assuming you have a button component
 
 const Map = dynamic(() => import('@/components/map'), { ssr: false });
 
@@ -59,7 +60,14 @@ export default function Home() {
 
                 {isMobile && (
                     <Button onClick={() => setShowEventForm(!showEventForm)} className="mt-2">
-                        {showEventForm ? "Loka viðburðaformi" : "Búa til viðburð"}
+                        {showEventForm ? "Loka viðburðaformi" :
+                            (
+                                <div className={'flex items-center gap-2'}>
+                                    <CirclePlus/>
+                                    <p>Búa til viðburð</p>
+                                </div>
+                            )
+                        }
                     </Button>
                 )}
 
