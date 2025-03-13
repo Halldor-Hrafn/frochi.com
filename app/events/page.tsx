@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {Event} from '@/lib/types'
 import {redirect} from "next/navigation";
 import {createClient} from "@/utils/supabase/client";
+import EventEntry from "@/components/event-entry";
 
 export default function Page() {
     const [events, setEvents] = useState<Event[]>([]);
@@ -31,24 +32,14 @@ export default function Page() {
 
     return (
         <div className="w-full min-w-screen-lg mx-auto">
-            events
-            <ul className={'min-w-[700px]'}>
-                {events.map(event => (
-                    <li
-                        key={event.id}
-                        className={'border-gray-200 border-2 p-4 w-full rounded hover:cursor-pointer'}
-                        onClick={(_) => redirect(`/events/${event.id}`)}
-                    >
-                        <h2 className={'border-b-2 border-b-gray-700 text-2xl'}>
-                            {event.title}
-                            <span className={'text-sm text-gray-600'}>
-                                {event.start_date.toLocaleDateString()} to {event.end_date.toLocaleDateString()}
-                            </span>
-                        </h2>
-                        <p>{event.description}</p>
-                    </li>
-                ))}
-            </ul>
+            <div className="">
+                <h1 className="text-5xl py-10">Events</h1>
+                <ul className='min-w-[700px] grid grid-cols-3 border-t border-t-primary rounded-sm  '>
+                    {events.map(event => (
+                        <EventEntry key={event.id} event={event} />
+                    ))}
+                </ul>
+            </div>
         </div>
     )
 }
