@@ -15,6 +15,20 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
     const [userInput, setUserInput] = useState<string>("");
     const supabase = createClient();
 
+    const addMessageToFeed = async (message: Message) => {
+        const ownerName = await getUsernameFromId(message.owner_id);
+
+        setMessages((prev) => [
+            ...prev,
+            {
+                ...message,
+                created_at: new Date(message.created_at),
+                owner_name: ownerName || "Unknown",
+            },
+        ]);
+    }
+
+
     useEffect(() => {
         const loadPrevMessages = async () => {
             const { error, data } = await supabase
@@ -58,19 +72,9 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
                 "postgres_changes",
                 { event: "INSERT", schema: "public", table: "messages", filter: `event_id=eq.${eventId}` },
                 async (payload) => {
-                    console.log("New message received:", payload.new);
+                    // console.log("New message received:", payload.new);
 
-                    const ownerName = await getUsernameFromId(payload.new.owner_id);
-
-                    // @ts-ignore
-                    setMessages((prev) => [
-                        ...prev,
-                        {
-                            ...payload.new,
-                            created_at: new Date(payload.new.created_at),
-                            owner_name: ownerName || "Unknown",
-                        },
-                    ]);
+                    await addMessageToFeed(payload.new as Message);
                 }
             )
             .subscribe();
@@ -82,6 +86,8 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
 
     const onMessageSend = async () => {
         if (!userInput.trim()) return;
+
+        setUserInput(""); // Clear input field after sending the message
 
         const res = await fetch("/api/events/chat", {
             method: "POST",
@@ -97,8 +103,6 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
             setError(new Error("Failed to send message"));
             return;
         }
-
-        setUserInput(""); // Clear input field after sending the message
     };
 
     return (
