@@ -14,7 +14,7 @@ const createPubUser = async (authId: string, email: string) => {
         .from("users")
         .insert([{
             auth_id: authId,
-            username: email.split('@')[0]
+            name: email.split('@')[0]
         }]);
 
     return error;
