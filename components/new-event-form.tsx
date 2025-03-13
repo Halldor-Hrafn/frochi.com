@@ -8,7 +8,7 @@ export default function NewEventForm({visible}: {visible: boolean}) {
     }
 
     return (
-        <div className={`${visible ? '' : 'hidden'}`}>
+        <div className={`m-4 p-2 border-2 border-gray-950 rounded ${visible ? '' : 'hidden'}`}>
             <p>Stofna viðburð</p>
             <form className={'flex flex-col'} onSubmit={onFormSubmit}>
                 <label htmlFor="title-inp">Nafn viðburðs</label>
@@ -24,7 +24,7 @@ export default function NewEventForm({visible}: {visible: boolean}) {
                 <label htmlFor="enddate-inp">Endar</label>
                 <input type="datetime-local" id={'enddate-inp'} required/>
 
-                <input type="submit" value="Stofna viðburð"/>
+                <input className={'mt-4'} type="submit" value="Stofna viðburð"/>
             </form>
         </div>
     )
