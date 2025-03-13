@@ -1,15 +1,9 @@
 import L, { LatLng } from 'leaflet';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-
-interface MarkerData {
-    name: string;
-    lat: number;
-    lng: number;
-    icon: string;
-    description: string;
-}
+import { createClient } from '@/utils/supabase/client';
+import { type MarkerData } from '@/lib/types';
 
 function chooseIcon(icon: string) {
     switch (icon) {
@@ -48,18 +42,6 @@ function renderMarkers(data: MarkerData[]) {
     })
 }
 
-// function LocationMarker() {
-//     const [position, setPosition] = useState<LatLng | null>(null);
-//     const map = useMapEvents({
-//         click(e) {
-//             setPosition(map.getCenter());
-//             map.flyTo(map.getCenter(), map.getZoom());
-
-//             console.log("Map clicked at:", )
-//         }
-//     })
-// }
-
 function LocationMarker() {
     const [markers, setMarkers] = useState<LatLng[]>([]);
     const map = useMapEvents({
@@ -82,29 +64,25 @@ function LocationMarker() {
 }
 
 export default function Map() {
-    const dummyData: MarkerData[] = [
-        {
-            "name": "blabla1",
-            "lat": 51.505,
-            "lng": -0.09,
-            "icon": "icon1",
-            "description": "description1"
-        },
-        {
-            "name": "blabla2",
-            "lat": 51.515,
-            "lng": -0.19,
-            "icon": "icon2",
-            "description": "description2"
+    const supabase = createClient();
+
+    const [data, setData] = useState<MarkerData[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await fetch('/api/events');
+            const json = await data.json();
+            setData(json);
         }
-    ]
+        fetchData();
+    }, []);
 
     return (
         <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: "50vh", width: "50vw" }}>
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            {renderMarkers(dummyData)}
+            {renderMarkers(data)}
             <LocationMarker />
         </MapContainer>
     );

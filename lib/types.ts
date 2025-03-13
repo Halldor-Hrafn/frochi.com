@@ -10,3 +10,11 @@ export type Event = {
     lon: number;
     owner_id: string;
 }
+
+export type MarkerData = {
+    name: string;
+    lat: number;
+    lng: number;
+    icon: string;
+    description: string;
+}
