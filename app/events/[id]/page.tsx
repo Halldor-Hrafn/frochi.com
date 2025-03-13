@@ -4,17 +4,32 @@ import React, {useEffect, useState} from "react";
 import {Event} from '@/lib/types';
 import EventChatRoom from "@/components/event-chatroom";
 
+type PageProps = {
+    params: Promise<{ id: string }>;
+};
 
-export default function Page({params}: { params: { id: string } }) {
+export default function Page({ params }: PageProps) {
     const [eventData, setEventData] = useState<Event>();
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+    const [eventId, setEventId] = useState<string | null>(null);
 
     useEffect(() => {
+        const unwrapParams = async () => {
+            const unwrappedParams = await params;
+            setEventId(unwrappedParams.id);
+        };
+
+        unwrapParams();
+    }, [params]);
+
+    useEffect(() => {
+        if (!eventId) return;
+
         const fetchEventData = async () => {
             setLoading(true);
             try {
-                const res = await fetch(`/api/events/?eventId=${params.id}`);
+                const res = await fetch(`/api/events/?eventId=${eventId}`);
                 if (!res.ok) {
                     if (res.status === 404) {
                         setError(new Error("This event does not exist"));
@@ -35,7 +50,7 @@ export default function Page({params}: { params: { id: string } }) {
         };
 
         fetchEventData();
-    }, [])
+    }, [eventId]);
 
     if (loading || !eventData) {
         return (
