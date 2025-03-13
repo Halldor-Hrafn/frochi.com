@@ -74,3 +74,48 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json(data);
 }
+
+export async function PATCH(req: NextRequest): Promise<NextResponse> {
+    const { id, title, start_date, end_date, description, lat, lng, icon } = await req.json();
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("events")
+        .update({
+            title,
+            start_date,
+            end_date,
+            description,
+            lat,
+            lng,
+            icon
+        })
+        .eq("id", id)
+        .select("*");
+
+    if (error) {
+        return NextResponse.json({
+            error: "Something went wrong"
+        }, {status: 500})
+    }
+
+    return NextResponse.json(data);
+}
+
+export async function DELETE(req: NextRequest): Promise<NextResponse> {
+    const eventId = await req.json();
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("events")
+        .delete()
+        .eq("id", eventId);
+
+    if (error) {
+        return NextResponse.json({
+            error: "Something went wrong"
+        }, {status: 500})
+    }
+
+    return NextResponse.json(data);
+}

@@ -1,7 +1,7 @@
 "use client";
 
-import React, {useEffect, useState} from "react";
-import {Event} from '@/lib/types';
+import React, { useEffect, useState } from "react";
+import { Event } from '@/lib/types';
 import EventChatRoom from "@/components/event-chatroom";
 
 type PageProps = {
@@ -9,10 +9,12 @@ type PageProps = {
 };
 
 export default function Page({ params }: PageProps) {
-    const [eventData, setEventData] = useState<Event>();
+    const [eventData, setEventData] = useState<Event | null>(null);
     const [error, setError] = useState<Error | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [eventId, setEventId] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
+    const [formData, setFormData] = useState<Partial<Event>>({});
 
     useEffect(() => {
         const unwrapParams = async () => {
@@ -42,6 +44,7 @@ export default function Page({ params }: PageProps) {
 
                 const data = await res.json();
                 setEventData(data);
+                setFormData(data);
             } catch (e: any) {
                 setError(e);
             } finally {
@@ -52,7 +55,43 @@ export default function Page({ params }: PageProps) {
         fetchEventData();
     }, [eventId]);
 
-    if (loading || !eventData) {
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const res = await fetch(`/api/events`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ...formData, id: eventId }),
+            });
+
+            if (!res.ok) {
+                throw new Error('Failed to update event');
+            }
+
+            const updatedEvent = await res.json();
+            console.log(updatedEvent.id);
+            setEventData(updatedEvent);
+            setIsEditing(false);
+        } catch (e: any) {
+            setError(e);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (loading) {
+        console.log('Loading:', loading);
         return (
             <div className={'flex min-h-screen justify-between w-screen'}>
                 <section className={'event-section w-2/3'}>
@@ -61,21 +100,76 @@ export default function Page({ params }: PageProps) {
                 <section className={'event-section'}>
                     loading...
                 </section>
-
             </div>
-        )
+        );
+    }
+
+    if (!eventData) {
+        console.log('Event data not found:', eventData);
+        return (
+            <div className={'flex min-h-screen justify-between w-screen'}>
+                <section className={'event-section w-2/3'}>
+                    Event data not found...
+                </section>
+                <section className={'event-section'}>
+                    Event data not found...
+                </section>
+            </div>
+        );
     }
 
     return (
         <div className={'flex min-h-screen justify-between w-screen'}>
             <section className={'event-section w-2/3'}>
                 <div className={'border-2 border-gray-700 p-4 rounded'}>
-                    <h2 className={'text-4xl border-b-2 border-b-gray-700 m-2'}>
-                        {eventData.title}
-                    </h2>
-                    <p className={'text-lg p-2'}>
-                        {eventData.description}
-                    </p>
+                    {isEditing ? (
+                        <form onSubmit={handleSubmit}>
+                            <input
+                                type="text"
+                                name="title"
+                                value={formData.title || ''}
+                                onChange={handleInputChange}
+                                className="block w-full p-2 border border-gray-300 rounded mb-2"
+                            />
+                            <textarea
+                                name="description"
+                                value={formData.description || ''}
+                                onChange={handleInputChange}
+                                className="block w-full p-2 border border-gray-300 rounded mb-2"
+                            />
+                            <input
+                                type="datetime-local"
+                                name="start_date"
+                                value={formData.start_date ? new Date(formData.start_date).toISOString().slice(0, 16) : ''}
+                                onChange={handleInputChange}
+                                className="block w-full p-2 border border-gray-300 rounded mb-2"
+                            />
+                            <input
+                                type="datetime-local"
+                                name="end_date"
+                                value={formData.end_date ? new Date(formData.end_date).toISOString().slice(0, 16) : ''}
+                                onChange={handleInputChange}
+                                className="block w-full p-2 border border-gray-300 rounded mb-2"
+                            />
+                            <input type="hidden" name="eventId" value={eventData.id} />
+                            <input type="hidden" name="owner_id" value={eventData.owner_id} />
+                            <input type="hidden" name="lat" value={eventData.lat} />
+                            <input type="hidden" name="lng" value={eventData.lon} />
+                            <input type="hidden" name="icon" value="icon2" />
+
+                            <button type="submit" className="bg-blue-500 text-white p-2 rounded">Save</button>
+                        </form>
+                    ) : (
+                        <>
+                            <h2 className={'text-4xl border-b-2 border-b-gray-700 m-2'}>
+                                {eventData.title}
+                            </h2>
+                            <p className={'text-lg p-2'}>
+                                {eventData.description}
+                            </p>
+                            <button onClick={() => setIsEditing(true)} className="bg-blue-500 text-white p-2 rounded">Update</button>
+                        </>
+                    )}
                 </div>
 
                 <EventChatRoom eventId={eventData.id} />
@@ -86,13 +180,13 @@ export default function Page({ params }: PageProps) {
                 </h2>
                 <div className={'ml-2 text-sm text-gray-700 mt-1'}>
                     <p>
-                        Byrjar: {eventData.start_date.toLocaleString().replace('T', '@')}
+                        Byrjar: {new Date(eventData.start_date).toLocaleString().replace('T', '@')}
                     </p>
                     <p>
-                        Endar: {eventData.end_date.toLocaleString().replace('T', '@')}
+                        Endar: {new Date(eventData.end_date).toLocaleString().replace('T', '@')}
                     </p>
                 </div>
             </section>
         </div>
-    )
+    );
 }
