@@ -9,6 +9,7 @@ const Map = dynamic(() => import('@/components/map'), {ssr: false});
 
 export default function Home() {
     const [data, setData] = useState<MarkerData[]>([]);
+    const [currPos, setCurrPos] = useState<LatLng | null>(null);
     const [showEventForm, setShowEventForm] = useState(false);
 
     useEffect(() => {
@@ -23,6 +24,7 @@ export default function Home() {
 
     function onMapClick(evt: LeafletMouseEvent) {
         const pos = evt.latlng;
+        setCurrPos(pos);
         data.pop(); // removes the last marker
 
         setData(old => [
@@ -46,7 +48,7 @@ export default function Home() {
                 <p className={'text-gray-800'}>Ýttu á kortið til að búa til viðburð.</p>
                 <div className="flex flex-col w-3/4 md:flex-row">
                     <Map width={'70vw'} height={'40vh'} data={data} className={'pt-2'} onClick={onMapClick}/>
-                    <NewEventForm visible={showEventForm}/>
+                    <NewEventForm visible={showEventForm} pos={currPos}/>
                 </div>
             </main>
         </>
