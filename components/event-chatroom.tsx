@@ -60,13 +60,14 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
                 async (payload) => {
                     console.log("New message received:", payload.new);
 
-                    const ownerName = await getUsernameFromId(payload.new[0].owner_id);
+                    const ownerName = await getUsernameFromId(payload.new.owner_id);
 
+                    // @ts-ignore
                     setMessages((prev) => [
                         ...prev,
                         {
-                            ...payload.new[0],
-                            created_at: new Date(payload.new[0].created_at),
+                            ...payload.new,
+                            created_at: new Date(payload.new.created_at),
                             owner_name: ownerName || "Unknown",
                         },
                     ]);
