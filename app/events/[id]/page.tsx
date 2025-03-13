@@ -12,35 +12,26 @@ export default function Page({params}: { params: { id: string } }) {
 
     useEffect(() => {
         const fetchEventData = async () => {
-            // setLoading(true);
-            // try {
-            //     const res = await fetch(`/api/events/${params.id}`);
-            //     if (!res.ok) {
-            //         setError(new Error(res.statusText));
-            //         return;
-            //     }
-            //
-            //     const data = await res.json();
-            //     setEventData(data);
-            // } catch (e: any) {
-            //     setError(e);
-            // } finally {
-            //     setLoading(false);
-            // }
+            setLoading(true);
+            try {
+                const res = await fetch(`/api/events/?eventId=${params.id}`);
+                if (!res.ok) {
+                    if (res.status === 404) {
+                        setError(new Error("This event does not exist"));
+                        return;
+                    }
 
-            setEventData(
-                {
-                    id: "id1",
-                    title: "this is an event",
-                    description: "help thepoor",
-                    start_date: new Date(),
-                    end_date: new Date(Date.now() + (1000 * 60 * 60 * 24 * 4)),
-                    created_at: new Date(),
-                    lat: -64.1029,
-                    lon: -20.3010,
-                    owner_id: "ownerid"
+                    setError(new Error(res.statusText));
+                    return;
                 }
-            )
+
+                const data = await res.json();
+                setEventData(data);
+            } catch (e: any) {
+                setError(e);
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchEventData();
@@ -49,15 +40,13 @@ export default function Page({params}: { params: { id: string } }) {
     if (loading || !eventData) {
         return (
             <div className={'flex min-h-screen justify-between w-screen'}>
-                <section className={'event-section'}>
+                <section className={'event-section w-2/3'}>
                     loading...
                 </section>
                 <section className={'event-section'}>
                     loading...
                 </section>
-                <section className={'event-section'}>
-                    loading...
-                </section>
+
             </div>
         )
     }
@@ -76,10 +65,18 @@ export default function Page({params}: { params: { id: string } }) {
 
                 <EventChatRoom eventId={eventData.id} />
             </section>
-            <section className={'event-section border-l-0'}>
-                <h2 className={'text-4xl border-b-2 border-b-gray-700 m-2'}>
+            <section className={'event-section border-l-0 p-2'}>
+                <h2 className={'text-4xl border-b-2 border-b-gray-700 p-1'}>
                     Upplýsingar
                 </h2>
+                <div className={'ml-2 text-sm text-gray-700 mt-1'}>
+                    <p>
+                        Byrjar: {eventData.start_date.toLocaleString().replace('T', '@')}
+                    </p>
+                    <p>
+                        Endar: {eventData.end_date.toLocaleString().replace('T', '@')}
+                    </p>
+                </div>
             </section>
         </div>
     )

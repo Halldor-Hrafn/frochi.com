@@ -1,0 +1,18 @@
+
+GET http://localhost:3000/api/events
+
+
+
+POST http://localhost:3000/api/events
+Content-Type: application/json
+
+{
+    "title": "Test Event",
+    "description": "This is a test event",
+    "start_date": "2021-01-01T00:00:00.000Z",
+    "end_date": "2021-01-01T23:59:59.999Z",
+    "owner_id": "1b5b48bd-0bf6-4c55-bd29-96c58b4a487f",
+    "lat": 51.5074,
+    "lng": -0.1278,
+    "icon": "icon2"
+}
