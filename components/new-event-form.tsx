@@ -9,6 +9,8 @@ export default function NewEventForm({visible, pos}: {visible: boolean, pos?: La
         const fetchLocationName = async () => {
             if (!pos) return;
 
+            setLocationName("---")
+
             const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng}`)
 
             if (res.ok) {
