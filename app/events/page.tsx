@@ -2,24 +2,30 @@
 import React, {useEffect, useState} from "react";
 import {Event} from '@/lib/types'
 import {redirect} from "next/navigation";
+import {createClient} from "@/utils/supabase/client";
 
 export default function Page() {
     const [events, setEvents] = useState<Event[]>([]);
 
     useEffect(() => {
-        setEvents([
-            {
-                id: "id1",
-                title: "this is an event",
-                description: "help thepoor",
-                start_date: new Date(),
-                end_date: new Date(Date.now() + (1000 * 60 * 60 * 24 * 4)),
-                created_at: new Date(),
-                lat: -64.1029,
-                lon: -20.3010,
-                owner_id: "ownerid"
+        const fetchAllEvents = async () => {
+            const supabase = createClient();
+            const {data, error} = await supabase.from("events").select('*');
+            if (error || !data) {
+                console.error(error);
+                return;
             }
-        ]);
+
+            setEvents(data.map((e: any) => {
+                return {
+                    ...e,
+                    start_date: new Date(e.start_date),
+                    end_date: new Date(e.end_date),
+                    created_at: new Date(e.created_at)
+                }
+            }));
+        }
+        fetchAllEvents();
     }, []);
 
 

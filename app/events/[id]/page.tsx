@@ -12,35 +12,26 @@ export default function Page({params}: { params: { id: string } }) {
 
     useEffect(() => {
         const fetchEventData = async () => {
-            // setLoading(true);
-            // try {
-            //     const res = await fetch(`/api/events/${params.id}`);
-            //     if (!res.ok) {
-            //         setError(new Error(res.statusText));
-            //         return;
-            //     }
-            //
-            //     const data = await res.json();
-            //     setEventData(data);
-            // } catch (e: any) {
-            //     setError(e);
-            // } finally {
-            //     setLoading(false);
-            // }
+            setLoading(true);
+            try {
+                const res = await fetch(`/api/events/?eventId=${params.id}`);
+                if (!res.ok) {
+                    if (res.status === 404) {
+                        setError(new Error("This event does not exist"));
+                        return;
+                    }
 
-            setEventData(
-                {
-                    id: "id1",
-                    title: "this is an event",
-                    description: "help thepoor",
-                    start_date: new Date(),
-                    end_date: new Date(Date.now() + (1000 * 60 * 60 * 24 * 4)),
-                    created_at: new Date(),
-                    lat: -64.1029,
-                    lon: -20.3010,
-                    owner_id: "ownerid"
+                    setError(new Error(res.statusText));
+                    return;
                 }
-            )
+
+                const data = await res.json();
+                setEventData(data);
+            } catch (e: any) {
+                setError(e);
+            } finally {
+                setLoading(false);
+            }
         };
 
         fetchEventData();
