@@ -4,8 +4,29 @@ import Link from "next/link";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
+import { EnvVarWarning } from "./env-var-warning";
 
-export default async function AuthButton() {
+
+export default async function Navbar() {
+return(
+  <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
+    <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
+      <div className="flex gap-5 items-center font-semibold">
+        <Link href={"/"}>Logo</Link>
+        <Button asChild size="sm" variant={"outline"}>
+          <Link href="/events">Events</Link>
+        </Button>
+      </div>
+      {!hasEnvVars ? <EnvVarWarning /> : <AuthButton />}
+
+    </div>
+  </nav>
+)
+  
+}
+
+
+async function AuthButton() {
   const supabase = await createClient();
 
   const {
@@ -68,3 +89,4 @@ export default async function AuthButton() {
     </div>
   );
 }
+
