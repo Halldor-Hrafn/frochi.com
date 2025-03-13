@@ -40,15 +40,13 @@ export default function Page({params}: { params: { id: string } }) {
     if (loading || !eventData) {
         return (
             <div className={'flex min-h-screen justify-between w-screen'}>
-                <section className={'event-section'}>
+                <section className={'event-section w-2/3'}>
                     loading...
                 </section>
                 <section className={'event-section'}>
                     loading...
                 </section>
-                <section className={'event-section'}>
-                    loading...
-                </section>
+
             </div>
         )
     }
@@ -67,10 +65,18 @@ export default function Page({params}: { params: { id: string } }) {
 
                 <EventChatRoom eventId={eventData.id} />
             </section>
-            <section className={'event-section border-l-0'}>
-                <h2 className={'text-4xl border-b-2 border-b-gray-700 m-2'}>
+            <section className={'event-section border-l-0 p-2'}>
+                <h2 className={'text-4xl border-b-2 border-b-gray-700 p-1'}>
                     Upplýsingar
                 </h2>
+                <div className={'ml-2 text-sm text-gray-300 mt-1'}>
+                    <p>
+                        Byrjar: {eventData.start_date.toLocaleString().replace('T', '@')}
+                    </p>
+                    <p>
+                        Endar: {eventData.end_date.toLocaleString().replace('T', '@')}
+                    </p>
+                </div>
             </section>
         </div>
     )
