@@ -1,4 +1,4 @@
-import {NextRequest, NextResponse} from "next/server";
+import {NextRequest, NextResponse } from "next/server";
 import {createClient} from "@/utils/supabase/server";
 
 
@@ -37,6 +37,34 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const {error, data} = await supabase
         .from("events")
         .select("*")
+
+    if (error) {
+        return NextResponse.json({
+            error: "Something went wrong"
+        }, {status: 500})
+    }
+
+    return NextResponse.json(data);
+}
+
+export async function POST(req: NextRequest): Promise<NextResponse> {
+    const { title, start_date, end_date, owner_id, description, lat, lng, icon } = await req.json();
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("events")
+        .insert([
+            {
+                title,
+                start_date,
+                end_date,
+                owner_id,
+                description,
+                lat,
+                lng,
+                icon
+            }
+        ]);
 
     if (error) {
         return NextResponse.json({
