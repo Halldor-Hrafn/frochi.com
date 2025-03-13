@@ -31,16 +31,16 @@ function getLocationNameStr(osmData: any) {
     return locationParts.length ? locationParts.join(", ") : "Ónákvæm mæling";
 }
 
-export default function NewEventForm({visible, pos}: {visible: boolean, pos?: LatLng}) {
+export default function NewEventForm({visible, pickedPos}: {visible: boolean, pickedPos?: LatLng}) {
     const [locationName, setLocationName] = useState("---");
 
     useEffect(() => {
         const fetchLocationName = async () => {
-            if (!pos) return;
+            if (!pickedPos) return;
 
             setLocationName("---")
 
-            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pos.lat}&lon=${pos.lng}`)
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${pickedPos.lat}&lon=${pickedPos.lng}`)
 
             if (res.ok) {
                 const data = await res.json();
@@ -52,7 +52,7 @@ export default function NewEventForm({visible, pos}: {visible: boolean, pos?: La
         }
 
         fetchLocationName();
-    }, [pos]);
+    }, [pickedPos]);
 
     function onFormSubmit(e: FormEvent) {
         e.preventDefault();
