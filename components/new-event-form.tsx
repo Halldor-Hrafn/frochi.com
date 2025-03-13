@@ -59,7 +59,7 @@ export default function NewEventForm({visible, pickedPos}: {visible: boolean, pi
     }
 
     return (
-        <div className={`p-2 border-2 h-fit max-w-7xl border-gray-950 rounded lg:mr-4 lg:mt-16 ${visible ? '' : 'hidden'}`}>
+        <div className={`p-2 border-2 h-fit max-w-7xl border-gray-950 rounded mt-4 lg:mt-16 ${visible ? '' : 'hidden'}`}>
             <h3 className={'text-center text-lg'}>Stofna viðburð</h3>
             <form className={'flex flex-row flex-wrap justify-center lg:flex-col'} onSubmit={onFormSubmit}>
                 <div className="flex flex-col">
@@ -74,7 +74,7 @@ export default function NewEventForm({visible, pickedPos}: {visible: boolean, pi
 
                 <div className="flex flex-col">
                     <label htmlFor="location-inp">Staðsetning</label>
-                    <input type="text" id={'location-inp'} value={locationName} readOnly/>
+                    <input className={'text-gray-700 !bg-gray-300'} type="text" id={'location-inp'} value={locationName} readOnly/>
                 </div>
 
                 <div className="flex flex-col">
