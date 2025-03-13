@@ -10,3 +10,11 @@ export type Event = {
     lon: number;
     owner_id: string;
 }
+
+export type Message = {
+    id: string;
+    owner_id: string;
+    event_id: string;
+    message: string;
+    created_at: Date;
+}
