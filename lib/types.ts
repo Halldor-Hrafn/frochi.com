@@ -14,6 +14,7 @@ export type Event = {
 export type Message = {
     id: string;
     owner_id: string;
+    owner_name: string; // this is not actually in the schema
     event_id: string;
     message: string;
     created_at: Date;

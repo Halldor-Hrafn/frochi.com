@@ -1,8 +1,9 @@
-'use client';
+"use client";
 import { createClient } from "@/utils/supabase/client";
-import {useEffect, useState} from "react";
-import {Message} from "@/lib/types";
+import { useEffect, useState } from "react";
+import { Message } from "@/lib/types";
 import ChatMessage from "@/components/chat-message";
+import { getUsernameFromId } from "@/utils/supabase/user";
 
 export type EventChatRoomProps = {
     eventId: string;
@@ -10,17 +11,17 @@ export type EventChatRoomProps = {
 
 export default function EventChatRoom({ eventId }: EventChatRoomProps) {
     const [messages, setMessages] = useState<Message[]>([]);
-    const [error, setError] = useState<Error>();
+    const [error, setError] = useState<Error | null>(null);
+    const [userInput, setUserInput] = useState<string>("");
+    const supabase = createClient();
 
     useEffect(() => {
-        const supabase = createClient();
-
         const loadPrevMessages = async () => {
-            const {error, data} = await supabase
+            const { error, data } = await supabase
                 .from("messages")
                 .select("*")
                 .eq("event_id", eventId)
-                .order("created_at", {ascending: false});
+                .order("created_at", { ascending: true });
 
             if (error) {
                 console.error(error);
@@ -30,51 +31,97 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
 
             const idToName: any = {}; // cache for userid to user name, used when fetching usernames from user ids
 
-            setMessages(await Promise.all(data.map(async (msg) => {
-                let ownerName: any = idToName[msg.owner_id];
-                if (!ownerName) {
+            setMessages(
+                await Promise.all(
+                    data.map(async (msg) => {
+                        let ownerName: string | null = idToName[msg.owner_id];
+                        if (!ownerName) {
+                            ownerName = await getUsernameFromId(msg.owner_id);
+                            idToName[msg.owner_id] = ownerName;
+                        }
 
-                }
-                return {
-                    ...msg,
-                    created_at: new Date(msg.created_at)
-                }
-            })));
-        }
-
-        const addChannelListener = () => {
-            return supabase
-                .channel('comments')
-                .on(
-                    'postgres_changes',
-                    { event: 'INSERT', schema: 'public', table: 'comments' },
-                    (payload) => {
-                        console.log("New comment:", payload);
-                    }
+                        return {
+                            ...msg,
+                            created_at: new Date(msg.created_at),
+                            owner_name: ownerName || "Unknown",
+                        };
+                    })
                 )
-                .subscribe();
-        }
-
-        const channel = addChannelListener();
+            );
+        };
 
         loadPrevMessages();
+
+        const channel = supabase
+            .channel(`messages:event_${eventId}`)
+            .on(
+                "postgres_changes",
+                { event: "INSERT", schema: "public", table: "messages", filter: `event_id=eq.${eventId}` },
+                async (payload) => {
+                    console.log("New message received:", payload.new);
+
+                    const ownerName = await getUsernameFromId(payload.new[0].owner_id);
+
+                    setMessages((prev) => [
+                        ...prev,
+                        {
+                            ...payload.new[0],
+                            created_at: new Date(payload.new[0].created_at),
+                            owner_name: ownerName || "Unknown",
+                        },
+                    ]);
+                }
+            )
+            .subscribe();
 
         return () => {
             channel.unsubscribe();
         };
-    }, []);
+    }, [eventId, supabase]);
+
+    const onMessageSend = async () => {
+        if (!userInput.trim()) return;
+
+        const res = await fetch("/api/events/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                event_id: eventId,
+                message: userInput,
+            }),
+        });
+
+        if (!res.ok) {
+            console.error(res.statusText);
+            setError(new Error("Failed to send message"));
+            return;
+        }
+
+        setUserInput(""); // Clear input field after sending the message
+    };
 
     return (
-        <div>
-            <p >
-                Chatroom content
-            </p>
-            <ul className={'border-2 border-gray-600 p-4'}>
-                {messages.map((message) => (
-                    <ChatMessage className={'mt-4'} created_at={message.created_at} message={message.message} owner_name={message.owner_id}></ChatMessage>
+        <div className="border-2 border-gray-600 p-4">
+            <ul>
+                {messages.map((message, i) => (
+                    <ChatMessage
+                        key={i}
+                        className={"mt-4"}
+                        created_at={message.created_at}
+                        message={message.message}
+                        owner_name={message.owner_name}
+                    />
                 ))}
             </ul>
-        </div>
 
+            <input
+                type="text"
+                value={userInput}
+                onChange={(e) => setUserInput(e.target.value)}
+                placeholder="Type to send a message"
+                onKeyDown={(e) => (e.key === "Enter" ? onMessageSend() : undefined)}
+                className="border p-2 w-full mt-4"
+            />
+        </div>
     );
 }
