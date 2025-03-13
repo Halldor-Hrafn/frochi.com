@@ -47,7 +47,7 @@ export default function Home() {
                 <h2 className="font-medium text-xl mt-2">Allir viðburðir</h2>
                 <p className={'text-gray-800'}>Ýttu á kortið til að búa til viðburð.</p>
                 <div className="flex flex-col w-3/4 md:flex-row">
-                    <Map width={'70vw'} height={'40vh'} data={data} className={'pt-2'} onClick={onMapClick}/>
+                    <Map width={'70vw'} height={'70vh'} data={data} className={'pt-2'} onClick={onMapClick}/>
                     <NewEventForm visible={showEventForm} pos={currPos}/>
                 </div>
             </main>

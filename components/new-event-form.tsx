@@ -28,7 +28,7 @@ export default function NewEventForm({visible, pos}: {visible: boolean, pos?: La
     }
 
     return (
-        <div className={`m-4 p-2 border-2 border-gray-950 rounded ${visible ? '' : 'hidden'}`}>
+        <div className={`m-4 p-2 border-2 h-fit border-gray-950 rounded ${visible ? '' : 'hidden'}`}>
             <p>Stofna viðburð</p>
             <form className={'flex flex-col'} onSubmit={onFormSubmit}>
                 <label htmlFor="title-inp">Nafn viðburðs</label>
@@ -47,7 +47,7 @@ export default function NewEventForm({visible, pos}: {visible: boolean, pos?: La
                 <label htmlFor="enddate-inp">Endar</label>
                 <input type="datetime-local" id={'enddate-inp'} required/>
 
-                <button className={'mt-4'} type={'submit'} value="">Stofna viðburð</button>
+                <button className={'my-4'} type={'submit'} value="">Stofna viðburð</button>
             </form>
         </div>
     )
