@@ -66,7 +66,7 @@ export type MapProps = {
 
 export default function Map({className, data, width, height, onClick}: MapProps) {
     return (
-        <div className={className || ""}>
+        <div className={`${className || ""}`}>
             <MapContainer center={[64.10589550758499, -21.817974854458868]} zoom={12}
                           style={{height: height, width: width}}>
                 <TileLayer

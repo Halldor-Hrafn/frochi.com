@@ -43,12 +43,15 @@ export default function Home() {
 
     return (
         <>
-            <main className="flex-1 flex flex-col px-4">
-                <h2 className="font-medium text-xl mt-2">Allir viðburðir</h2>
-                <p className={'text-gray-800'}>Ýttu á kortið til að búa til viðburð.</p>
-                <div className="flex flex-col w-3/4 md:flex-row">
-                    <Map width={'70vw'} height={'70vh'} data={data} className={'pt-2'} onClick={onMapClick}/>
+            <main className="flex-1 flex flex-col mx-4">
+
+                <div className="flex flex-col items-start w-3/4 lg:flex-row">
                     <NewEventForm visible={showEventForm} pos={currPos}/>
+                    <div>
+                        <h2 className="font-medium text-xl mt-2">Allir viðburðir</h2>
+                        <p className={'text-gray-800'}>Ýttu á kortið til að búa til viðburð.</p>
+                        <Map width={window.screen.width < 1000 ? '90vw' : '70vw'} height={'60vh'} data={data} className={'pt-2'} onClick={onMapClick}/>
+                    </div>
                 </div>
             </main>
         </>

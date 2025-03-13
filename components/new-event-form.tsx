@@ -59,24 +59,34 @@ export default function NewEventForm({visible, pos}: {visible: boolean, pos?: La
     }
 
     return (
-        <div className={`m-4 p-2 border-2 h-fit border-gray-950 rounded ${visible ? '' : 'hidden'}`}>
-            <p>Stofna viðburð</p>
-            <form className={'flex flex-col'} onSubmit={onFormSubmit}>
-                <label htmlFor="title-inp">Nafn viðburðs</label>
-                <input type="text" id={'title-inp'} required/>
+        <div className={`p-2 border-2 h-fit max-w-7xl border-gray-950 rounded lg:mr-4 lg:mt-16 ${visible ? '' : 'hidden'}`}>
+            <h3 className={'text-center text-lg'}>Stofna viðburð</h3>
+            <form className={'flex flex-row flex-wrap justify-center lg:flex-col'} onSubmit={onFormSubmit}>
+                <div className="flex flex-col">
+                    <label htmlFor="title-inp">Nafn viðburðs</label>
+                    <input type="text" id={'title-inp'} required/>
+                </div>
 
-                <label htmlFor="desc-inp">Lýsing</label>
-                <input type="text" id={'desc-inp'} required/>
+                <div className="flex flex-col">
+                    <label htmlFor="desc-inp">Lýsing</label>
+                    <input type="text" id={'desc-inp'} required/>
+                </div>
 
-                <label htmlFor="location-inp">Staðsetning</label>
-                <input type="text" id={'location-inp'} value={locationName} readOnly/>
+                <div className="flex flex-col">
+                    <label htmlFor="location-inp">Staðsetning</label>
+                    <input type="text" id={'location-inp'} value={locationName} readOnly/>
+                </div>
 
-                <label htmlFor="startdate-inp">Byrjar</label>
-                <input type="datetime-local" id={'startdate-inp'} required/>
+                <div className="flex flex-col">
+                    <label htmlFor="startdate-inp">Byrjar</label>
+                    <input type="datetime-local" id={'startdate-inp'} required/>
+                </div>
 
 
-                <label htmlFor="enddate-inp">Endar</label>
-                <input type="datetime-local" id={'enddate-inp'} required/>
+                <div className="flex flex-col">
+                    <label htmlFor="enddate-inp">Endar</label>
+                    <input type="datetime-local" id={'enddate-inp'} required/>
+                </div>
 
                 <button className={'my-4'} type={'submit'} value="">Stofna viðburð</button>
             </form>
