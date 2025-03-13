@@ -1,0 +1,86 @@
+"use client";
+
+import React, {useEffect, useState} from "react";
+import {Event} from '@/lib/types';
+import EventChatRoom from "@/components/event-chatroom";
+
+
+export default function Page({params}: { params: { id: string } }) {
+    const [eventData, setEventData] = useState<Event>();
+    const [error, setError] = useState<Error | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        const fetchEventData = async () => {
+            // setLoading(true);
+            // try {
+            //     const res = await fetch(`/api/events/${params.id}`);
+            //     if (!res.ok) {
+            //         setError(new Error(res.statusText));
+            //         return;
+            //     }
+            //
+            //     const data = await res.json();
+            //     setEventData(data);
+            // } catch (e: any) {
+            //     setError(e);
+            // } finally {
+            //     setLoading(false);
+            // }
+
+            setEventData(
+                {
+                    id: "id1",
+                    title: "this is an event",
+                    description: "help thepoor",
+                    start_date: new Date(),
+                    end_date: new Date(Date.now() + (1000 * 60 * 60 * 24 * 4)),
+                    created_at: new Date(),
+                    lat: -64.1029,
+                    lon: -20.3010,
+                    owner_id: "ownerid"
+                }
+            )
+        };
+
+        fetchEventData();
+    }, [])
+
+    if (loading || !eventData) {
+        return (
+            <div className={'flex min-h-screen justify-between w-screen'}>
+                <section className={'event-section'}>
+                    loading...
+                </section>
+                <section className={'event-section'}>
+                    loading...
+                </section>
+                <section className={'event-section'}>
+                    loading...
+                </section>
+            </div>
+        )
+    }
+
+    return (
+        <div className={'flex min-h-screen justify-between w-screen'}>
+            <section className={'event-section w-2/3'}>
+                <div className={'border-2 border-gray-700 p-4 rounded'}>
+                    <h2 className={'text-4xl border-b-2 border-b-gray-700 m-2'}>
+                        {eventData.title}
+                    </h2>
+                    <p className={'text-lg p-2'}>
+                        {eventData.description}
+                    </p>
+                </div>
+
+                <EventChatRoom eventId={eventData.id} />
+            </section>
+            <section className={'event-section border-l-0'}>
+                <h2 className={'text-4xl border-b-2 border-b-gray-700 m-2'}>
+                    Upplýsingar
+                </h2>
+            </section>
+        </div>
+    )
+}
