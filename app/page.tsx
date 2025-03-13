@@ -9,7 +9,7 @@ const Map = dynamic(() => import('@/components/map'), {ssr: false});
 
 export default function Home() {
     const [data, setData] = useState<MarkerData[]>([]);
-    const [currPos, setCurrPos] = useState<LatLng | null>(null);
+    const [currPos, setCurrPos] = useState<LatLng | undefined>(undefined);
     const [showEventForm, setShowEventForm] = useState(false);
 
     useEffect(() => {
