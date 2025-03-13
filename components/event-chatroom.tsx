@@ -107,17 +107,19 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
 
     return (
         <div className="border-2 border-gray-600 p-4">
-            <ul>
-                {messages.map((message, i) => (
-                    <ChatMessage
-                        key={i}
-                        className={"mt-4"}
-                        created_at={message.created_at}
-                        message={message.message}
-                        owner_name={message.owner_name}
-                    />
-                ))}
-            </ul>
+            <div className="overflow-y-scroll h-48 ">
+                <ul>
+                    {messages.map((message, i) => (
+                        <ChatMessage
+                            key={i}
+                            className={"mt-4"}
+                            created_at={message.created_at}
+                            message={message.message}
+                            owner_name={message.owner_name}
+                        />
+                    ))}
+                </ul>
+            </div>
 
             <input
                 type="text"
