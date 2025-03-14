@@ -5,6 +5,7 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
 import { EnvVarWarning } from "./env-var-warning";
+import { getUsernameFromId } from "@/utils/supabase/user";
 
 
 export default function Navbar() {
@@ -32,6 +33,8 @@ async function AuthButton() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  
+  const username = user ? getUsernameFromId(user.id) : "Something has gone wrong"
 
   if (!hasEnvVars) {
     return (
@@ -71,6 +74,7 @@ async function AuthButton() {
   }
   return user ? (
     <div className="flex  items-center gap-4">
+      <a href="/profile">{username}</a>
       <form action={signOutAction}>
         <Button type="submit" variant={"outline"}>
           Sign out
