@@ -3,37 +3,7 @@ import {LatLng} from "leaflet";
 import {createClient} from "@/utils/supabase/client";
 import {redirect} from "next/navigation";
 import {buttonVariants} from "@/components/ui/button";
-import {cn} from "@/utils/utils";
-
-/**
- *
- * @param osmData - open streetmap api data from https://nominatim.openstreetmap.org/reverse?format=json&lat=64.10589550758499&lon=-21.817974854458868
- */
-function getLocationNameStr(osmData: any) {
-    if (!osmData || typeof osmData !== "object") {
-        return "Eitthvað fór úrskeiðis";
-    }
-
-    const {
-        road,            // Street name
-        house_number,    // House number (if available)
-        suburb,          // Neighborhood / district
-        city,            // City
-        town,            // Town (alternative to city)
-        village,         // Village (alternative to city/town)
-        county,          // County / region
-        state,           // State / province
-        country,         // Country
-    } = osmData.address || {};
-
-    const street = road ? `${road}${house_number ? ` ${house_number}` : ""}` : "";
-    const locality = city || town || village || suburb || "";
-    const region = county || state || "";
-
-    const locationParts = [street, locality, region, country].filter(Boolean);
-
-    return locationParts.length ? locationParts.join(", ") : "Ónákvæm mæling";
-}
+import {cn, getLocationNameStr} from "@/utils/utils";
 
 export default function NewEventForm({visible, pickedPos}: {visible: boolean, pickedPos?: LatLng}) {
     const [locationName, setLocationName] = useState("Veldu stað á korti");

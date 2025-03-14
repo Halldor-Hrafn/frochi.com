@@ -7,6 +7,7 @@ import {Button} from "@/components/ui/button";
 import { AuthUser } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
 import {CalendarDays, Crown, Hourglass, MapPin, Pencil, PersonStanding} from "lucide-react";
+import {getLocationNameStr} from "@/utils/utils";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -36,6 +37,17 @@ function PageSkeleton() {
     );
 }
 
+async function getLocationName(lat: number, lng: number) {
+    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+    if (!res.ok) {
+        return null;
+    }
+
+    const data = await res.json();
+
+    return getLocationNameStr(data);
+}
+
 export default function Page({ params }: PageProps) {
     const [eventData, setEventData] = useState<Event | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
@@ -45,6 +57,8 @@ export default function Page({ params }: PageProps) {
     const [formData, setFormData] = useState<Partial<Event>>({});
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isUserInThisEvent, setIsUserInThisEvent] = useState<boolean>(false);
+    const [locationName, setLocationName] = useState<string>("---");
+    const [eventOwner, setEventOwner] = useState<{name: string, id: string} | null>(null);
 
     useEffect(() => {
         const unwrapParams = async () => {
@@ -78,7 +92,14 @@ export default function Page({ params }: PageProps) {
     }, [eventId]);
 
     useEffect(() => {
+        const updateMiscEventData = async () => {
+            if (!eventData) return;
+
+            setLocationName((await getLocationName(eventData.lat, eventData.lng)) || "---");
+        }
+
         setIsUserInThisEvent(isInThisEvent());
+        updateMiscEventData();
     }, [eventData]);
 
     useEffect(() => {
@@ -233,7 +254,7 @@ export default function Page({ params }: PageProps) {
                     <p className={'flex flex-row items-center'}>
                         <MapPin/>
                         <strong>Staðsetning:</strong>
-                        &nbsp;[Implement Location]
+                        &nbsp; {locationName}
                     </p>
                     <p className={'flex flex-row items-center'}>
                         <Crown/>
