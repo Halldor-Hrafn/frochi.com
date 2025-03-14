@@ -31,12 +31,12 @@ export default function Page() {
 
 
     return (
-        <div className="w-full min-w-screen-lg mx-auto">
+        <div className="min-w-screen-lg mx-auto">
             <div className="">
                 <h1 className="text-5xl py-10">Events</h1>
-                <ul className='min-w-[700px] grid grid-cols-3 border-t border-t-primary'>
+                <ul className='min-w-[70px] min-h-[200px] grid grid-cols-1 md:grid-cols-3 border-t border-t-primary gap-2'>
                     {events.map(event => (
-                        <div key={event.id} className="m-2 rounded-sm hover:bg-accent">
+                        <div key={event.id} className="m-2 rounded-sm hover:bg-accent h-full">
                             <EventEntry key={event.id} event={event} />
                         </div>
                     ))}

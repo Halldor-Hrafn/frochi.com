@@ -5,7 +5,7 @@ export default function EventEntry({event}:{event:Event}) {
 return(    
     <li
     key={event.id}
-    className={'border-foreground border-2 p-4 w-full rounded hover:cursor-pointer'}
+    className={'border-foreground border-2 p-4 h-full rounded hover:cursor-pointer'}
     onClick={(_) => redirect(`/events/${event.id}`)}
     >
         <h2 className={'border-b-2 border-b-gray-700 text-2xl'}>
