@@ -154,7 +154,7 @@ export default function Page({ params }: PageProps) {
                             <input type="hidden" name="eventId" value={eventData.id} />
                             <input type="hidden" name="owner_id" value={eventData.owner_id} />
                             <input type="hidden" name="lat" value={eventData.lat} />
-                            <input type="hidden" name="lng" value={eventData.lon} />
+                            <input type="hidden" name="lng" value={eventData.lng} />
                             <input type="hidden" name="icon" value="icon2" />
 
                             <button type="submit" className="bg-blue-500 text-white p-2 rounded">Save</button>
