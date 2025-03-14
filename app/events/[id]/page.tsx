@@ -246,7 +246,7 @@ export default function Page({ params }: PageProps) {
                                 </button>
                             </div>
                             <div className={'flex flex-col gap-2'}>
-                                <button onClick={leaveOrJoinEvent}>
+                                <button className={buttonVariants({variant: 'secondary'})} onClick={leaveOrJoinEvent}>
                                     {isUserInThisEvent ? "Fara úr viðburði" : "Taka þátt"}
                                 </button>
                             </div>

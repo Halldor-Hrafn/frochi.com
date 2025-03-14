@@ -1,3 +1,4 @@
+import {formatTime} from "@/utils/utils";
 
 
 export type ChatMessageProps = {
@@ -11,7 +12,7 @@ export default function ChatMessage(props: ChatMessageProps) {
 
     return (
         <div className={`hover:bg-accent max-w-full ${props.className || ''}`}>
-            <p>{props.owner_name} {props.created_at.toLocaleTimeString()}</p>
+            <p>{props.owner_name} {formatTime(props.created_at)}</p>
             <p className={'text-xl text-wrap break-all'}>{props.message}</p>
         </div>
     )
