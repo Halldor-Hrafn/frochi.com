@@ -95,17 +95,17 @@ export default function Page() {
 
     if (loading) {
         return (
-            <div className="min-w-screen w-screen mx-auto ">
+            <div className="min-w-screen w-screen mx-auto">
                 <div className={'flex items-center justify-center'}>
                     <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Events</h1>
                 </div>
 
-                <div>
-                    <Button variant={"default"} className={'ml-6'}>
-                        <CirclePlus className={'mr-1'}/>
+                <div className="flex items-center gap-4 w-screen justify-start">
+                    <Button variant={"default"} className="ml-6">
+                        <CirclePlus className="mr-1" />
                         <a href="/?toast=ýttu á kortið til að velja staðsetningu fyrir viðburð">Búa til viðburð</a>
                     </Button>
-                    <SearchBar onQueryChange={onQueryChange}/>
+                    <SearchBar onQueryChange={onQueryChange} />
                 </div>
 
                 <ul className='w-full min-w-[70px] min-h-[200px] grid grid-cols-1 md:grid-cols-3 gap-2 pt-8'>
@@ -124,12 +124,12 @@ export default function Page() {
                 <div className={'flex items-center justify-center'}>
                     <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Events</h1>
                 </div>
-                <div className={'flex items-center gap-4'}>
-                    <Button variant={"default"} className={'ml-6'}>
-                        <CirclePlus className={'mr-1'}/>
+                <div className="flex items-center gap-4 w-screen justify-start">
+                    <Button variant={"default"} className="ml-6">
+                        <CirclePlus className="mr-1" />
                         <a href="/?toast=ýttu á kortið til að velja staðsetningu fyrir viðburð">Búa til viðburð</a>
                     </Button>
-                    <SearchBar onQueryChange={onQueryChange}/>
+                    <SearchBar onQueryChange={onQueryChange} />
                 </div>
                 <ul className='min-w-[70px] min-h-[200px] grid grid-cols-1 md:grid-cols-3 gap-2 pt-8'>
                     {filteredEvents.map(event => (
