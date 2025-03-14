@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Event } from '@/lib/types';
 import EventChatRoom from "@/components/event-chatroom";
+import {buttonVariants} from "@/components/ui/button";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -167,7 +168,7 @@ export default function Page({ params }: PageProps) {
                             <p className={'text-lg p-2'}>
                                 {eventData.description}
                             </p>
-                            <button onClick={() => setIsEditing(true)} className="bg-blue-500 text-white p-2 rounded">Update</button>
+                            <button onClick={() => setIsEditing(true)} className={buttonVariants({variant: "default"})}>Breyta</button>
                         </>
                     )}
                 </div>
