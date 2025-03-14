@@ -4,6 +4,7 @@ import {Event} from '@/lib/types'
 import {redirect} from "next/navigation";
 import {createClient} from "@/utils/supabase/client";
 import EventEntry from "@/components/event-entry";
+import Map from "@/components/map";
 
 export default function Page() {
     const [events, setEvents] = useState<Event[]>([]);
@@ -32,7 +33,7 @@ export default function Page() {
 
     return (
         <div className="min-w-screen-lg mx-auto">
-            <div className="">
+            <div className="">               
                 <h1 className="text-5xl py-10">Events</h1>
                 <ul className='min-w-[70px] min-h-[200px] grid grid-cols-1 md:grid-cols-3 border-t border-t-primary gap-2'>
                     {events.map(event => (
