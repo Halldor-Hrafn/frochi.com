@@ -3,11 +3,10 @@
 import React, { useEffect, useState } from "react";
 import { Event } from '@/lib/types';
 import EventChatRoom from "@/components/event-chatroom";
-import {Button, buttonVariants} from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import { AuthUser } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
 import {CalendarDays, Crown, Hourglass, MapPin, Pencil, PersonStanding} from "lucide-react";
-import { cn } from "@/utils/utils";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -16,7 +15,7 @@ type PageProps = {
 
 function PageSkeleton() {
     return (
-        <div className="flex flex-col lg:flex-row gap-6 min-h-screen p-6 bg-white text-black w-screen">
+        <div className="flex flex-col lg:flex-row gap-6 min-h-screen p-6 text-black w-screen">
             <section className="flex-1 p-6 border border-gray-300 rounded-lg shadow-sm space-y-4">
                 <div className="bg-gray-300 animate-pulse h-8 w-1/3 rounded"></div>
                 <div className="bg-gray-300 animate-pulse h-4 w-2/3 rounded"></div>
@@ -40,6 +39,7 @@ function PageSkeleton() {
 export default function Page({ params }: PageProps) {
     const [eventData, setEventData] = useState<Event | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<Error | null>(null);
     const [eventId, setEventId] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [formData, setFormData] = useState<Partial<Event>>({});
@@ -93,6 +93,35 @@ export default function Page({ params }: PageProps) {
         fetchUser();
     }, []);
 
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const res = await fetch('/api/events', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ...formData, id: eventId }),
+            });
+
+            if (!res.ok) {
+                throw new Error('Failed to update event');
+            }
+
+            window.location.reload();
+        } catch (e: any) {
+            setError(e);
+        }
+    };
+
     const isInThisEvent = () => {
         return eventData?.participants.some(u => u.user_id === user?.id) || false;
     };
@@ -112,46 +141,50 @@ export default function Page({ params }: PageProps) {
 
     if (!eventData) {
         return (
-            <div className="flex flex-col lg:flex-row gap-6 min-h-screen p-6 bg-white text-black w-screen">
+            <div className="flex flex-col lg:flex-row gap-6 min-h-screen p-6 w-screen">
                 <h1>Þessi viðburður fannst ekki</h1>
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col lg:flex-row gap-6 min-h-screen p-6 bg-white text-black w-screen">
+        <div className="flex flex-col lg:flex-row gap-6 min-h-screen p-6 w-screen">
             {/* left section */}
-            <section className="flex-1 p-6 border border-gray-300 rounded-lg shadow-sm">
+            <section className="flex-1 p-6 border border-muted-foreground rounded-lg shadow-sm">
                 <div className="mb-4">
                     {isEditing ? (
-                        <form className="space-y-3">
+                        <form className="space-y-3" onSubmit={handleSubmit}>
                             <input
                                 type="text"
                                 name="title"
                                 value={formData.title || ''}
                                 className="w-full p-2 border rounded-md"
+                                onChange={handleInputChange}
                             />
                             <textarea
                                 name="description"
                                 value={formData.description || ''}
                                 className="w-full p-2 border rounded-md"
                                 rows={4}
+                                onChange={handleInputChange}
                             />
                             <input
                                 type="datetime-local"
                                 name="start_date"
                                 value={formData.start_date ? new Date(formData.start_date).toISOString().slice(0, 16) : ''}
                                 className="w-full p-2 border rounded-md"
+                                onChange={handleInputChange}
                             />
                             <input
                                 type="datetime-local"
                                 name="end_date"
                                 value={formData.end_date ? new Date(formData.end_date).toISOString().slice(0, 16) : ''}
                                 className="w-full p-2 border rounded-md"
+                                onChange={handleInputChange}
                             />
-                            <button type="submit" className="w-full bg-black text-white py-2 rounded-md">
+                            <Button type="submit">
                                 Save Changes
-                            </button>
+                            </Button>
                         </form>
                     ) : (
                         <div>
@@ -172,7 +205,6 @@ export default function Page({ params }: PageProps) {
                 <Button
                     variant="default"
                     onClick={leaveOrJoinEvent}
-                    className=""
                 >
                     {isUserInThisEvent ? "Yfirgefa atburð" : "Taka þátt"}
                 </Button>
@@ -180,7 +212,7 @@ export default function Page({ params }: PageProps) {
             </section>
 
             {/* right section */}
-            <section className="w-full lg:w-1/3 p-6 border border-gray-300 rounded-lg shadow-sm">
+            <section className="w-full lg:w-1/3 p-6 border border-muted-foreground rounded-lg shadow-sm">
                 <h2 className="text-xl font-semibold border-b pb-2">Event Information</h2>
                 <div className="mt-4 space-y-2">
                     <p className={'flex flex-row items-center'}>
