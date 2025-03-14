@@ -67,7 +67,7 @@ const HomeComponent = () => {
         const pos = evt.latlng;
         setCurrPos(pos);
 
-        if (data[data.length - 1].title === 'New Event') { // i know how shitty this is, but it works.
+        if (data[data.length - 1].title === 'New event') { // i know how shitty this is, but it works.
             data.pop(); // removes the previous marker
         }
 
