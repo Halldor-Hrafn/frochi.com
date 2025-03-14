@@ -8,13 +8,16 @@ import {EnvVarWarning} from "./env-var-warning";
 import {getUsernameFromId} from "@/utils/supabase/user";
 import {ThemeSwitcher} from "@/components/theme-switcher";
 
-
 export default function Navbar() {
     return (
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
             <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
                 <div className="flex gap-5 items-center font-semibold">
-                    <Link href={"/"}>Logo</Link>
+
+                    <Link className={'size-10'} href={"/"}>
+                        <img alt={"Home"} src={'/frochi.png'}/>
+                    </Link>
+
                     <Button asChild size="sm" variant={"outline"}>
                         <Link href="/events">Events</Link>
                     </Button>
