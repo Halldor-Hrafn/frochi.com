@@ -31,7 +31,6 @@ export default function Layout({
               setUser({ ...data.user, username, profile_image });
           }
       };
-
       fetchUser();
   }, [supabase]);
 
