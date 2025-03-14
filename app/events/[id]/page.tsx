@@ -69,7 +69,7 @@ export default function Page({params}: { params: { id: string } }) {
                 <h2 className={'text-4xl border-b-2 border-b-gray-700 p-1'}>
                     Upplýsingar
                 </h2>
-                <div className={'ml-2 text-sm text-gray-700 mt-1'}>
+                <div className={'ml-2 text-sm color-foreground mt-1'}>
                     <p>
                         Byrjar: {eventData.start_date.toLocaleString().replace('T', '@')}
                     </p>
