@@ -10,7 +10,7 @@ return(
     >
         <h2 className={'border-b-2 border-b-gray-700 text-2xl'}>
             {event.title}
-            <span className={'text-sm text-gray-600 px-2'}>
+            <span className={'text-sm color-foreground px-2'}>
                 {event.start_date.toLocaleDateString()} to {event.end_date.toLocaleDateString()}
             </span>
         </h2>

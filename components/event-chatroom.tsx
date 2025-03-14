@@ -16,8 +16,6 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
     const supabase = createClient();
     const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-
-
     const addMessageToFeed = async (message: Message) => {
         const ownerName = await getUsernameFromId(message.owner_id);
 
@@ -29,6 +27,8 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
                 owner_name: ownerName || "Unknown",
             },
         ]);
+
+        
     }
 
 
@@ -65,6 +65,8 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
                     })
                 )
             );
+
+
         };
 
         loadPrevMessages();
@@ -81,11 +83,27 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
                 }
             )
             .subscribe();
-
+            
         return () => {
             channel.unsubscribe();
         };
     }, [eventId, supabase]);
+
+    useEffect(() => {
+        if (scrollContainerRef.current) {
+        const wasAtBottom = scrollContainerRef.current.scrollTop == scrollContainerRef.current.scrollHeight - 328 || 
+                            scrollContainerRef.current.scrollTop == scrollContainerRef.current.scrollHeight - 260;
+
+        console.log(wasAtBottom, scrollContainerRef.current?.scrollTop, scrollContainerRef.current?.scrollHeight);
+
+        // If the user was at the bottom, scroll to the bottom after the message is added
+        if (wasAtBottom) {
+        setTimeout(() => {
+            scrollContainerRef.current?.scrollTo(0, scrollContainerRef.current.scrollHeight);
+        }, 10);
+        }
+        }
+    }, [messages]); 
 
     const onMessageSend = async () => {
         if (!userInput.trim()) return;
