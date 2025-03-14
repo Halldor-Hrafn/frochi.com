@@ -1,6 +1,7 @@
 import {FormEvent, useEffect, useState} from "react";
 import {LatLng} from "leaflet";
 import {createClient} from "@/utils/supabase/client";
+import {redirect} from "next/navigation";
 
 /**
  *
@@ -84,6 +85,11 @@ export default function NewEventForm({visible, pickedPos}: {visible: boolean, pi
             body: JSON.stringify(body),
         });
 
+        if (res.ok) {
+            const resData = await res.json();
+            console.log(resData);
+            redirect(`/events/${resData.id}`)
+        }
     }
 
     return (
