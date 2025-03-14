@@ -90,30 +90,33 @@ const HomeComponent = () => {
             <Toaster position={'top-right'} />
             <main className="flex flex-col items-center w-full min-w-screen max-w-screen mx-auto px-4">
                 {/*mobile only*/}
-                {isMobile && showEventForm && <NewEventForm visible={showEventForm} pickedPos={currPos} />}
+                {isMobile &&  <NewEventForm visible={showEventForm} pickedPos={currPos} />}
 
-                {isMobile && (
-                    <Button onClick={() => setShowEventForm(!showEventForm)} className="mt-2">
-                        {showEventForm ? "Loka viðburðaformi" :
-                            (
-                                <div className={'flex items-center gap-2'}>
-                                    <CirclePlus />
-                                    <p>Búa til viðburð</p>
-                                </div>
-                            )
-                        }
-                    </Button>
-                )}
-
-                {/*desktop layout */}
                 <div className={`flex ${isMobile ? "flex-col" : "flex-row"} items-start w-full gap-4 mt-4`}>
                     <div className="flex flex-col w-full">
-                        <h2 className="font-medium text-xl">Allir viðburðir</h2>
-                        <p>{user?.id ? 'Ýttu á kortið til að búa til viðburð.' : (
-                            <a href={'/sign-up'} className={'hover:cursor-pointer hover:underline hover:text-secondary-foreground'}>
-                                Skráðu þig inn til að búa til viðburð
-                            </a>
-                        )}</p>
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <h2 className="font-medium text-xl">Allir viðburðir</h2>
+                                <p>{user?.id ? 'Ýttu á kortið til að búa til viðburð.' : (
+                                    <a href={'/sign-up'} className={'hover:cursor-pointer hover:underline hover:text-secondary-foreground'}>
+                                        Skráðu þig inn til að búa til viðburð
+                                    </a>
+                                )}</p>
+                            </div>
+                            <Button onClick={() => setShowEventForm(!showEventForm)} className="mt-2">
+                                {showEventForm ? "Loka viðburðaformi" :
+                                    (
+                                        <div className={'flex  gap-2'}>
+                                            <CirclePlus />
+                                            {!isMobile && (
+                                                <p>Búa til viðburð</p>
+                                            )}
+                                        </div>
+                                    )
+                                }
+                            </Button>
+                        </div>
+
 
                         <Map
                             width={isMobile ? "90vw" : "70vw"}

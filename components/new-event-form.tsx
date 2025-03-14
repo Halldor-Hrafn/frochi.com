@@ -36,7 +36,7 @@ function getLocationNameStr(osmData: any) {
 }
 
 export default function NewEventForm({visible, pickedPos}: {visible: boolean, pickedPos?: LatLng}) {
-    const [locationName, setLocationName] = useState("---");
+    const [locationName, setLocationName] = useState("Veldu stað á korti");
 
     const supabase = createClient();
 
