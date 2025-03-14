@@ -40,7 +40,7 @@ async function AuthButton() {
         data: {user},
     } = await supabase.auth.getUser();
 
-    const profileImageUrl = user ? (await getProfileImageLinkFromId(user.id) || DEFAULT_PFP_URL)
+    const profile_image = user ? (await getProfileImageLinkFromId(user.id) || DEFAULT_PFP_URL)
         : DEFAULT_PFP_URL
 
 
