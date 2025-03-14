@@ -1,17 +1,19 @@
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { Geist } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+import {ThemeSwitcher} from "@/components/theme-switcher";
+import {Geist} from "next/font/google";
+import {ThemeProvider} from "next-themes";
 import "./globals.css";
 import Navbar from "@/components/navbar";
+import {Button} from "@/components/ui/button";
+import {CodeXml} from "lucide-react";
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
     : "http://localhost:3000";
 
 export const metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Frochi!!!",
-  description: "The fastest way to Frochi around",
+    metadataBase: new URL(defaultUrl),
+    title: "Frochi",
+    description: "The fastest way to Frochi around",
 };
 
 const geistSans = Geist({
@@ -40,7 +42,7 @@ export default function RootLayout({
                 </div>
 
                 <footer
-                    className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-4">
+                    className="w-full flex items-center justify-around border-t mx-auto text-center text-xs gap-8 py-4">
                     <p>
                         Copyright {new Date().getFullYear()}&copy;
                     </p>
@@ -54,7 +56,11 @@ export default function RootLayout({
                         >háa@fb
                         </a>
                     </p>
-                    <ThemeSwitcher/>
+                    <Button variant={'ghost'}>
+                        <a href="https://github.com/Halldor-Hrafn/frochi.com">
+                            <CodeXml size={20}/>
+                        </a>
+                    </Button>
                 </footer>
             </main>
         </ThemeProvider>
