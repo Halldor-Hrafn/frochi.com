@@ -247,6 +247,11 @@ export default function Page({ params }: PageProps) {
                     <p>
                         Endar: {new Date(eventData.end_date).toLocaleString().replace('T', '@')}
                     </p>
+                    <br/>
+                    <br/>
+                    <p>
+                        Þátttakendur {eventData.participants.length}
+                    </p>
                 </div>
             </section>
         </div>
