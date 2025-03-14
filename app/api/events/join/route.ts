@@ -2,6 +2,20 @@ import {NextRequest, NextResponse} from "next/server";
 import {createClient} from "@/utils/supabase/server";
 
 
+async function isUserInEvent(eventId: string, uid: string): Promise<boolean> {
+    const supabase = await createClient();
+
+    const {data, error} = await supabase
+        .from('event_users')
+        .select('*')
+        .eq('event_id', eventId)
+        .eq('user_id', uid);
+
+    if (error) return true;
+
+    return data.length > 0;
+}
+
 export async function POST(req: NextRequest): Promise<NextResponse> {
     const supabase = await createClient();
     const body = await req.json();
@@ -16,6 +30,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     const uid = data.user.id;
 
+    if (await isUserInEvent(event_id, uid)) {
+        return NextResponse.json({error: "You are already in this event"}, {status: 400});
+
+    }
     const {data: insertData, error: insertError} = await supabase
         .from('event_users')
         .insert(

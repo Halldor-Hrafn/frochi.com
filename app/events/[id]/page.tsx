@@ -21,6 +21,7 @@ export default function Page({ params }: PageProps) {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [formData, setFormData] = useState<Partial<Event>>({});
     const [user, setUser] = useState<AuthUser | null>(null);
+    const [isUserInThisEvent, setIsUserInThisEvent] = useState<boolean>(false);
 
     useEffect(() => {
         const unwrapParams = async () => {
@@ -47,6 +48,8 @@ export default function Page({ params }: PageProps) {
                     setError(new Error(res.statusText));
                     return;
                 }
+
+                setIsUserInThisEvent(isInThisEvent());
 
 
                 const data = await res.json();
@@ -112,6 +115,14 @@ export default function Page({ params }: PageProps) {
         }
     };
 
+    const isInThisEvent = () => {
+        if (!eventData) {
+            return false;
+        }
+
+        return eventData.participants.map(u => u.user_id).includes(user?.id || "");
+    }
+
     const joinEvent = async () => {
         const res = await fetch(`/api/events/join`, {
             method: 'POST',
@@ -122,6 +133,8 @@ export default function Page({ params }: PageProps) {
                 'Content-Type': 'application/json',
             }
         });
+
+        setIsUserInThisEvent(true);
     }
 
     const leaveEvent = async () => {
@@ -134,6 +147,16 @@ export default function Page({ params }: PageProps) {
                 'Content-Type': 'application/json',
             }
         });
+
+        setIsUserInThisEvent(false);
+    }
+
+    const leaveOrJoinEvent = async () => {
+        if (isInThisEvent()) {
+            await leaveEvent();
+        } else {
+            await joinEvent();
+        }
     }
 
     if (loading) {
@@ -223,11 +246,8 @@ export default function Page({ params }: PageProps) {
                                 </button>
                             </div>
                             <div className={'flex flex-col gap-2'}>
-                                <button onClick={joinEvent}>
-                                    JOIN
-                                </button>
-                                <button onClick={leaveEvent}>
-                                    LEAVE
+                                <button onClick={leaveOrJoinEvent}>
+                                    {isUserInThisEvent ? "Fara úr viðburði" : "Taka þátt"}
                                 </button>
                             </div>
                         </div>
