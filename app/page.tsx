@@ -10,6 +10,7 @@ import {CirclePlus} from "lucide-react";
 import {toast, Toaster} from "react-hot-toast";
 import {AuthUser} from "@supabase/supabase-js";
 import {createClient} from "@/utils/supabase/client";
+import {useSearchParams} from "next/navigation";
 
 const Map = dynamic(() => import('@/components/map'), { ssr: false });
 
@@ -22,6 +23,7 @@ export default function Home() {
     const [isMobile, setIsMobile] = useState(false);
     const [user, setUser] = useState<AuthUser | null>(null);
 
+    const searchParams = useSearchParams();
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch('/api/events');
@@ -47,6 +49,11 @@ export default function Home() {
         const handleResize = () => setIsMobile(window.innerWidth <= MOBILE_VIEW_MAX_WIDTH);
         handleResize();
         window.addEventListener("resize", handleResize);
+
+
+        if (searchParams.get('toast')) {
+            toast.success(searchParams.get('toast'), {duration: 10_000});
+        }
 
         return () => window.removeEventListener("resize", handleResize);
     }, []);
