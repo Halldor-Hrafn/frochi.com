@@ -35,6 +35,7 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
 
     useEffect(() => {
         const loadPrevMessages = async () => {
+            if (!eventId) return;
             const { error, data } = await supabase
                 .from("messages")
                 .select("*")
@@ -167,7 +168,7 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
                     onKeyDown={(e) => (e.key === "Enter" ? onMessageSend() : undefined)}
                     className="w-full bg-background placeholder-primary justify-end !border-0"
                 />
-                <SendHorizontal className={'mr-2 hover:cursor-pointer'} />
+                <SendHorizontal onClick={onMessageSend} className={'mr-2 hover:cursor-pointer'} />
             </div>
 
         </div>
