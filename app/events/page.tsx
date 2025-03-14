@@ -36,7 +36,7 @@ export default function Page() {
                 <h1 className="text-5xl py-10">Events</h1>
                 <ul className='min-w-[700px] grid grid-cols-3 border-t border-t-primary'>
                     {events.map(event => (
-                        <div className="m-2 rounded-sm hover:bg-accent">
+                        <div key={event.id} className="m-2 rounded-sm hover:bg-accent">
                             <EventEntry key={event.id} event={event} />
                         </div>
                     ))}

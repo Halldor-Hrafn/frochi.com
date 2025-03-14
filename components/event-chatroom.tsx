@@ -129,9 +129,10 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
 
     useEffect(() => {
         if (scrollContainerRef.current) {
-            const wasAtBottom = scrollContainerRef.current.scrollTop == scrollContainerRef.current.scrollHeight - 328 || 
-                                scrollContainerRef.current.scrollTop == scrollContainerRef.current.scrollHeight - 260;
+            const wasAtBottom = true
             const wasAtTop = scrollContainerRef.current.scrollTop === 0;
+
+            console.log(scrollContainerRef.current.scrollTop, scrollContainerRef.current.scrollHeight, scrollContainerRef.current.clientHeight, scrollContainerRef.current.clientTop)
             // If the user was at the bottom, scroll to the bottom after the message is added
             if (wasAtBottom || wasAtTop) {
                 setTimeout(() => {
@@ -157,7 +158,7 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
                 </ul>
             </div>
 
-            <div className={'flex items-center border border-border rounded-sm w-full'}>
+            <div className={'flex items-center border border-border rounded-sm w-full mt-5'}>
                 <input
                     type="text"
                     value={userInput}
