@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import {cn} from "@/utils/utils";
 
 
+<<<<<<< HEAD
 type ProfilePageProps = {
     params: Promise<{ id: string }>; // `params` is now a Promise in Next.js 13
   };
@@ -32,6 +33,9 @@ export default function Profile({ params }: ProfilePageProps) {
         fetchProfile();
       }, [params]);
 
+=======
+export default function Profile({ params }: PageProps) {
+>>>>>>> 0391671 (Push Merge)
 
 
 
