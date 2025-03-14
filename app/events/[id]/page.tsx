@@ -112,6 +112,30 @@ export default function Page({ params }: PageProps) {
         }
     };
 
+    const joinEvent = async () => {
+        const res = await fetch(`/api/events/join`, {
+            method: 'POST',
+            body: JSON.stringify({
+                event_id: eventId,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+    }
+
+    const leaveEvent = async () => {
+        const res = await fetch(`/api/events/leave`, {
+            method: 'POST',
+            body: JSON.stringify({
+                event_id: eventId,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+    }
+
     if (loading) {
         console.log('Loading:', loading);
         return (
@@ -182,21 +206,31 @@ export default function Page({ params }: PageProps) {
                             <button type="submit" className="bg-blue-500 text-white p-2 rounded">Save</button>
                         </form>
                     ) : (
-                        <>
-                            <h2 className={'text-4xl border-b-2 border-b-gray-700 m-2'}>
-                                {eventData.title}
-                            </h2>
-                            <p className={'text-lg p-2'}>
-                                {eventData.description}
-                            </p>
-                            <button
-                                onClick={() => setIsEditing(true)}
-                                className={cn(buttonVariants({variant: "default"}), `${eventData.owner_id !== user?.id ? '!hidden' : ''} flex flex-row items-center gap-1 ml-2`)}
-                            >
-                                <Pencil size={16}/>
-                                Breyta
-                            </button>
-                        </>
+                        <div className={'flex justify-between'}>
+                            <div>
+                                <h2 className={'text-4xl border-b-2 border-b-gray-700 m-2'}>
+                                    {eventData.title}
+                                </h2>
+                                <p className={'text-lg p-2'}>
+                                    {eventData.description}
+                                </p>
+                                <button
+                                    onClick={() => setIsEditing(true)}
+                                    className={cn(buttonVariants({variant: "default"}), `${eventData.owner_id !== user?.id ? '!hidden' : ''} flex flex-row items-center gap-1 ml-2`)}
+                                >
+                                    <Pencil size={16}/>
+                                    Breyta
+                                </button>
+                            </div>
+                            <div className={'flex flex-col gap-2'}>
+                                <button onClick={joinEvent}>
+                                    JOIN
+                                </button>
+                                <button onClick={leaveEvent}>
+                                    LEAVE
+                                </button>
+                            </div>
+                        </div>
                     )}
                 </div>
 
@@ -212,6 +246,11 @@ export default function Page({ params }: PageProps) {
                     </p>
                     <p>
                         Endar: {new Date(eventData.end_date).toLocaleString().replace('T', '@')}
+                    </p>
+                    <br/>
+                    <br/>
+                    <p>
+                        Þátttakendur {eventData.participants.length}
                     </p>
                 </div>
             </section>
