@@ -132,8 +132,6 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
             const wasAtBottom = scrollContainerRef.current.scrollTop == scrollContainerRef.current.scrollHeight - 328 || 
                                 scrollContainerRef.current.scrollTop == scrollContainerRef.current.scrollHeight - 260;
 
-            console.log(wasAtBottom, scrollContainerRef.current?.scrollTop, scrollContainerRef.current?.scrollHeight);
-
             // If the user was at the bottom, scroll to the bottom after the message is added
             if (wasAtBottom) {
                 setTimeout(() => {
