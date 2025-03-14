@@ -75,7 +75,7 @@ export default function Home() {
                 <div className={`flex ${isMobile ? "flex-col" : "flex-row"} items-start w-full gap-4 mt-4`}>
                     <div className="flex flex-col w-full">
                         <h2 className="font-medium text-xl">Allir viðburðir</h2>
-                        <p className="text-gray-800">Ýttu á kortið til að búa til viðburð.</p>
+                        <p>Ýttu á kortið til að búa til viðburð.</p>
 
                         <Map
                             width={isMobile ? "90vw" : "70vw"}

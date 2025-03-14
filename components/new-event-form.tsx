@@ -59,33 +59,41 @@ export default function NewEventForm({visible, pickedPos}: {visible: boolean, pi
     }
 
     return (
-        <div className={`p-2 border-2 h-fit max-w-7xl border-gray-950 rounded mt-4 lg:mt-16 ${visible ? '' : 'hidden'}`}>
+        <div className={`p-2 border-2 h-fit max-w-7xl border-foreground rounded mt-4 lg:mt-16 ${visible ? '' : 'hidden'}`}>
             <h3 className={'text-center text-lg'}>Stofna viðburð</h3>
             <form className={'flex flex-row flex-wrap justify-center lg:flex-col'} onSubmit={onFormSubmit}>
                 <div className="flex flex-col">
                     <label htmlFor="title-inp">Nafn viðburðs</label>
-                    <input type="text" id={'title-inp'} required/>
+                    <div className="bg-input w-full">
+                        <input className="w-full" type="text" id={'title-inp'} required/>
+                    </div>  
                 </div>
 
                 <div className="flex flex-col">
-                    <label htmlFor="desc-inp">Lýsing</label>
-                    <input type="text" id={'desc-inp'} required/>
+                    <label htmlFor="desc-inp">Lýsing</label> 
+                    <div className="bg-input w-full rounded">
+                        <input className="w-full" type="text" id={'desc-inp'} required/>
+                    </div>
                 </div>
 
                 <div className="flex flex-col">
                     <label htmlFor="location-inp">Staðsetning</label>
-                    <input className={'text-gray-700 !bg-gray-300'} type="text" id={'location-inp'} value={locationName} readOnly/>
+                    <input className={'text-gray-400 !bg-gray-200 rounded'} type="text" id={'location-inp'} value={locationName} readOnly/>
                 </div>
 
                 <div className="flex flex-col">
-                    <label htmlFor="startdate-inp">Byrjar</label>
-                    <input type="datetime-local" id={'startdate-inp'} required/>
+                    <label htmlFor="startdate-inp">Byrjar</label> 
+                    <div className="bg-input w-full rounded">
+                        <input className="w-full" type="datetime-local" id={'startdate-inp'} required/>
+                    </div>
                 </div>
 
 
                 <div className="flex flex-col">
-                    <label htmlFor="enddate-inp">Endar</label>
-                    <input type="datetime-local" id={'enddate-inp'} required/>
+                    <label htmlFor="enddate-inp">Endar</label> 
+                    <div className="bg-input w-full rounded">
+                        <input className="w-full" type="datetime-local" id={'enddate-inp'} required/>
+                    </div>
                 </div>
 
                 <button className={'my-4'} type={'submit'} value="">Stofna viðburð</button>
