@@ -9,7 +9,7 @@ export type Event = {
     lat: number;
     lng: number;
     owner_id: string;
-    participants: {user_id: number}[]; // not in the schema
+    participants: {user_id: string}[]; // not in the schema
 }
 
 export type Message = {
