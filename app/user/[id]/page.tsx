@@ -2,7 +2,6 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/client";
 import { getProfileImageLinkFromId, getUsernameFromId } from "@/utils/supabase/user";
 import { AuthUser } from "@supabase/supabase-js";

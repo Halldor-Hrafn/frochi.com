@@ -22,15 +22,16 @@ export default function Layout({
   const supabase = createClient();
 
   useEffect(() => {
-      const fetchUser = async () => {
-          const { error, data } = await supabase.auth.getUser();
-          if (data && !error) {
-              const username = await getUsernameFromId(user?.id);
-              const profile_image = user ? await getProfileImageLinkFromId(user.id) 
-                           : "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images//default_profile_image.png"
-              setUser({ ...data.user, username, profile_image });
-          }
-      };
+    const fetchUser = async () => {
+        const { error, data } = await supabase.auth.getUser();
+        if (data && !error) {
+            const userId = data.user?.id;
+            const username = userId ? await getUsernameFromId(userId) : null;
+            const profile_image = userId ? await getProfileImageLinkFromId(userId) 
+                         : "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images//default_profile_image.png";
+            setUser({ ...data.user, username, profile_image });
+        }
+    };
 
       fetchUser();
   }, [supabase]);
