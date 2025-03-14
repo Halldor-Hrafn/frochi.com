@@ -36,7 +36,10 @@ export default function Home() {
     function onMapClick(evt: LeafletMouseEvent) {
         const pos = evt.latlng;
         setCurrPos(pos);
-        data.pop(); // removes the previous marker
+
+        if (data[data.length - 1].title === 'New Event') { // i know how shitty this is, but it works.
+            data.pop(); // removes the previous marker
+        }
 
         setData(old => [
             ...old,

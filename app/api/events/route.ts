@@ -96,7 +96,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
                 lng,
                 icon
             }
-        ]);
+        ])
+        .select("*");
 
     if (error) {
         console.log(error);
@@ -105,7 +106,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         }, {status: 500})
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json(data[0]);
 }
 
 export async function PATCH(req: NextRequest): Promise<NextResponse> {
