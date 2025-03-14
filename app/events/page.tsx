@@ -100,8 +100,8 @@ export default function Page() {
                     <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Events</h1>
                 </div>
 
-                <div className="flex items-center gap-4 w-screen justify-start">
-                    <Button variant={"default"} className="ml-6">
+                <div className="flex flex-col mt-4 ml-4 md:flex-row items-start gap-2 w-screen justify-start">
+                    <Button variant={"default"} className="">
                         <CirclePlus className="mr-1" />
                         <a href="/?toast=ýttu á kortið til að velja staðsetningu fyrir viðburð">Búa til viðburð</a>
                     </Button>
@@ -124,8 +124,8 @@ export default function Page() {
                 <div className={'flex items-center justify-center'}>
                     <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Events</h1>
                 </div>
-                <div className="flex items-center gap-4 w-screen justify-start">
-                    <Button variant={"default"} className="ml-6">
+                <div className="flex flex-col mt-4 ml-4 md:flex-row items-start gap-2 w-screen justify-start">
+                    <Button variant={"default"} className="">
                         <CirclePlus className="mr-1" />
                         <a href="/?toast=ýttu á kortið til að velja staðsetningu fyrir viðburð">Búa til viðburð</a>
                     </Button>
