@@ -7,7 +7,8 @@ import {buttonVariants} from "@/components/ui/button";
 import {AuthUser} from "@supabase/supabase-js";
 import {createClient} from "@/utils/supabase/client";
 import {Pencil} from "lucide-react";
-import { cn } from "@/lib/utils";
+
+import {cn} from "@/utils/utils";
 
 type PageProps = {
     params: Promise<{ id: string }>;

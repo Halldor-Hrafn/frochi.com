@@ -2,8 +2,8 @@ import {FormEvent, useEffect, useState} from "react";
 import {LatLng} from "leaflet";
 import {createClient} from "@/utils/supabase/client";
 import {redirect} from "next/navigation";
-import {cn} from "@/lib/utils";
 import {buttonVariants} from "@/components/ui/button";
+import {cn} from "@/utils/utils";
 
 /**
  *
