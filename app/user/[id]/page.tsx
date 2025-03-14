@@ -6,6 +6,7 @@ import { getProfileImageLinkFromId, getUsernameFromId } from "@/utils/supabase/u
 import { AuthUser } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import {cn} from "@/utils/utils";
+import { redirect } from "next/navigation";
 
 
 type ProfilePageProps = {
@@ -20,13 +21,19 @@ export default function Profile({ params }: ProfilePageProps) {
 
     useEffect(() => {
         const fetchProfile = async () => {
+            const {data, error} = await supabase.auth.getUser();
             const { id } = await params;// Get the user ID from the URL params
-    
-          // Fetch the profile data using the user ID
-          const username = await getUsernameFromId(id);
-          const profile_image = await getProfileImageLinkFromId(id);
-    
-          setProfileData({ username, profile_image });
+
+            if (id == data.user?.id){
+                redirect("/user")
+            }
+
+            // Fetch the profile data using the user ID
+            const username = await getUsernameFromId(id);
+            const profile_image = await getProfileImageLinkFromId(id);
+
+            setProfileData({ username, profile_image });
+
         };
     
         fetchProfile();
