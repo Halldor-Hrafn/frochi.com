@@ -3,10 +3,11 @@ import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState, useRef } from "react";
 import { Message } from "@/lib/types";
 import ChatMessage from "@/components/chat-message";
-import { getUsernameFromId } from "@/utils/supabase/user";
+import {getProfileImageLinkFromId, getUsernameFromId} from "@/utils/supabase/user";
 import {SendHorizontal} from "lucide-react";
 import {AuthUser} from "@supabase/supabase-js";
 
+const DEFAULT_PFP_URL = "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"
 export type EventChatRoomProps = {
     eventId: string;
     user: AuthUser | null;
@@ -22,13 +23,14 @@ export default function EventChatRoom({ eventId, user }: EventChatRoomProps) {
 
     const addMessageToFeed = async (message: Message) => {
         const ownerName = await getUsernameFromId(message.owner_id);
-
+        const ownerIcon = await getProfileImageLinkFromId(message.owner_id);
         setMessages((prev) => [
             ...prev,
             {
                 ...message,
                 created_at: new Date(message.created_at),
                 owner_name: ownerName || "Unknown",
+                owner_icon_url: ownerIcon || DEFAULT_PFP_URL,
             },
         ]);
 
@@ -51,27 +53,31 @@ export default function EventChatRoom({ eventId, user }: EventChatRoomProps) {
                 return;
             }
 
-            const idToName: any = {}; // cache for userid to user name, used when fetching usernames from user ids
+            const idToUserData: any = {}; // cache for userid to user name, used when fetching usernames from user ids
 
             setMessages(
                 await Promise.all(
                     data.map(async (msg) => {
-                        let ownerName: string | null = idToName[msg.owner_id];
+                        let {name: ownerName, icon_url: ownerIcon} = idToUserData[msg.owner_id] || {};
                         if (!ownerName) {
                             ownerName = await getUsernameFromId(msg.owner_id);
-                            idToName[msg.owner_id] = ownerName;
+                            idToUserData[msg.owner_id] = {...idToUserData[msg.owner_id], name: ownerName};
+                        }
+
+                        if (!ownerIcon) {
+                            ownerIcon = await getProfileImageLinkFromId(msg.owner_id);
+                            idToUserData[msg.owner_id] = {...idToUserData[msg.owner_id], icon_url: ownerIcon};
                         }
 
                         return {
                             ...msg,
                             created_at: new Date(msg.created_at),
                             owner_name: ownerName || "Unknown",
+                            owner_icon_url: ownerIcon || DEFAULT_PFP_URL
                         };
                     })
                 )
             );
-
-
         };
 
         loadPrevMessages();
@@ -157,6 +163,7 @@ export default function EventChatRoom({ eventId, user }: EventChatRoomProps) {
                             created_at={message.created_at}
                             message={message.message}
                             owner_name={message.owner_name}
+                            owner_icon_url={message.owner_icon_url}
                         />
                     ))}
                 </ul>
