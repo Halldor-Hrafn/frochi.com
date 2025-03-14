@@ -43,19 +43,19 @@ export default function Profile({ params }: ProfilePageProps) {
 
 
     return (
-    <div>
-        <div className="max-w-7xl flex flex-col gap-12 items-start m-10">
-            <div className="mx-auto text-center">
-                <div className="flex justify-center items-center">
-                    <img 
-                    src={user?.profile_image} 
-                    alt="Profile Image" 
-                    width="200px"
-                    className="max-w-full rounded-[50%]"/>
+        <div>
+            <div className="max-w-7xl flex flex-col gap-12 items-start m-10">
+                <div className="mx-auto text-center">
+                    <div className="flex justify-center items-center">
+                        <img 
+                        src={user?.profile_image} 
+                        alt="Profile Image" 
+                        width="200px"
+                        className="max-w-full rounded-[50%]"/>
+                    </div>
+                    <h2 className="text-2xl">{user?.username}</h2>
                 </div>
-                <h2 className="text-2xl">{user?.username}</h2>
             </div>
         </div>
-    </div>
     );
 }
