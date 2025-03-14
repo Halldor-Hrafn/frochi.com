@@ -7,6 +7,7 @@ import { LatLng, LeafletMouseEvent } from "leaflet";
 import NewEventForm from "@/components/new-event-form";
 import { Button } from "@/components/ui/button";
 import {CirclePlus} from "lucide-react";
+import {toast, Toaster} from "react-hot-toast";
 
 const Map = dynamic(() => import('@/components/map'), { ssr: false });
 
@@ -21,6 +22,10 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch('/api/events');
+            if (!res.ok) {
+                toast.error("Failed to fetch events.")
+                return;
+            }
             const json = await res.json();
             setData(json);
         };
@@ -57,6 +62,7 @@ export default function Home() {
 
     return (
         <>
+            <Toaster position={'top-right'}/>
             <main className="flex flex-col items-center w-full min-w-screen max-w-screen mx-auto px-4">
                 {/*mobile only*/}
                 {isMobile && showEventForm && <NewEventForm visible={showEventForm} pickedPos={currPos} />}

@@ -2,6 +2,8 @@ import {FormEvent, useEffect, useState} from "react";
 import {LatLng} from "leaflet";
 import {createClient} from "@/utils/supabase/client";
 import {redirect} from "next/navigation";
+import {cn} from "@/lib/utils";
+import {buttonVariants} from "@/components/ui/button";
 
 /**
  *
@@ -94,7 +96,7 @@ export default function NewEventForm({visible, pickedPos}: {visible: boolean, pi
 
     return (
         <div className={`p-2 border-2 h-fit max-w-7xl border-foreground rounded mt-4 lg:mt-16 ${visible ? '' : 'hidden'}`}>
-            <h3 className={'text-center text-lg'}>Stofna viðburð</h3>
+            <h3 className={'text-center text-lg'}>Búa til viðburð</h3>
             <form className={'flex flex-row flex-wrap justify-center lg:flex-col'} onSubmit={onFormSubmit}>
                 <div className="flex flex-col">
                     <label htmlFor="title-inp">Nafn viðburðs</label>
@@ -130,7 +132,7 @@ export default function NewEventForm({visible, pickedPos}: {visible: boolean, pi
                     </div>
                 </div>
 
-                <button className={'my-4'} type={'submit'} value="">Stofna viðburð</button>
+                <button className={cn(buttonVariants({variant: "default"}),'my-4')} type={'submit'} value="">Stofna viðburð</button>
             </form>
         </div>
     )
