@@ -8,9 +8,11 @@ import {CirclePlus} from "lucide-react";
 
 export default function Page() {
     const [events, setEvents] = useState<Event[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchAllEvents = async () => {
+            setLoading(true);
             const res = await fetch('/api/events');
 
             if (!res.ok) {
@@ -27,10 +29,29 @@ export default function Page() {
                     created_at: new Date(e.created_at)
                 }
             }));
+            setLoading(false);
         }
         fetchAllEvents();
     }, []);
 
+    if (loading) {
+        return (
+            <div className="min-w-screen w-screen mx-auto ">
+                <div className={'flex items-center justify-center'}>
+                    <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Events</h1>
+                </div>
+                <Button variant={"default"} className={'ml-6'}>
+                    <CirclePlus className={'mr-1'}/>
+                    <a href="/?toast=ýttu á kortið til að velja staðsetningu fyrir viðburð">Búa til viðburð</a>
+                </Button>
+                <ul className='w-full min-w-[70px] min-h-[200px] grid grid-cols-1 md:grid-cols-3 gap-2 pt-8'>
+                    {[...Array(9)].map((_, index) => (
+                        <div key={index} className="m-2 rounded-sm bg-gray-300 animate-pulse h-40" />
+                    ))}
+                </ul>
+            </div>
+        );
+    }
 
     return (
         <div className="min-w-screen-lg mx-auto">
