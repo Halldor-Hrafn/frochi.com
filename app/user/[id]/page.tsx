@@ -9,6 +9,7 @@ import {cn} from "@/utils/utils";
 import { redirect } from "next/navigation";
 
 
+<<<<<<< HEAD
 type ProfilePageProps = {
     params: Promise<{ id: string }>; // `params` is now a Promise in Next.js 13
   };
@@ -39,6 +40,9 @@ export default function Profile({ params }: ProfilePageProps) {
         fetchProfile();
       }, [params]);
 
+=======
+export default function Profile({ params }: PageProps) {
+>>>>>>> 0391671 (Push Merge)
 
 
 
