@@ -148,7 +148,7 @@ export default function EventChatRoom({ eventId, user }: EventChatRoomProps) {
 
     return (
         <div className="flex flex-col justify-end border-2 border-gray-600 border-t-0 p-4 min-h-[450px] max-h-[450px]">
-            <div ref={scrollContainerRef} className="overflow-y-auto mb-2">
+            <div ref={scrollContainerRef} className="overflow-y-auto ">
                 <ul>
                     {messages.map((message, i) => (
                         <ChatMessage

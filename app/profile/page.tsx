@@ -1,31 +1,66 @@
 "use client";
 
-
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/client";
 import { getUsernameFromId } from "@/utils/supabase/user";
 import { AuthUser } from "@supabase/supabase-js";
-import Link from "next/link";
-import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Profile() {
-    const [user, setUser] = useState<AuthUser & {username: string | null} | null>(null);
-    const [formData, setFormData] = useState<{id: string, new_username: string | null}| null>(null);
+    const [user, setUser] = useState<AuthUser & { username: string | null } | null>(null);
+    const [formData, setFormData] = useState({
+        id: '',
+        newName: '',
+    });
     const supabase = createClient();
 
     useEffect(() => {
         const fetchUser = async () => {
-            const supabase = await createClient();
-            const {error, data} = await supabase.auth.getUser();
+            const { error, data } = await supabase.auth.getUser();
             if (data && !error) {
-                
-                setUser({...data.user,username: await getUsernameFromId(data.user.id)});
-                console.log('usr id:', data.user.id)
+                const username = await getUsernameFromId(data.user.id);
+                setUser({ ...data.user, username });
+                // Set formData's id with the user's ID
+                setFormData((prevState) => ({
+                    ...prevState,
+                    id: data.user.id,
+                    newName: username || '', // Set newName if available, else empty string
+                }));
             }
-        }
+        };
 
         fetchUser();
-    }, []);
+    }, [supabase]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const res = await fetch(`/api/profile`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: formData.newName }),
+            });
+            if (!res.ok) {
+                throw new Error('Failed to update username');
+            }
+
+            const updatedEvent = await res.json();
+            console.log(updatedEvent.id);
+        } catch (e: any) {
+            console.error('Error updating username:', e.message);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -52,14 +87,24 @@ export default function Profile() {
     };
 
     return (
-    <>
-        <p>{user ? user.username : ""}</p>
-        <form onSubmit={handleSubmit}>
-            <input type="text" placeholder="New Name" />
-            <div className="bg-gray-500">
-                <input type="button" value="submit"/>
-            </div>
-        </form>
-    </>
+        <div>
+            <p>{user ? user.username : 'Loading user data...'}</p>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="hidden"
+                    name="id"
+                    value={formData.id}
+                />
+                <input
+                    type="text"
+                    name="newName"
+                    placeholder="New Name"
+                    value={formData.newName}
+                    onChange={handleInputChange}
+                    required
+                />
+                <button type="submit">send</button>
+            </form>
+        </div>
     );
 }
