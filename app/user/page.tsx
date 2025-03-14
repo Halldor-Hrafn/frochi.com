@@ -1,11 +1,11 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/client";
 import { getUsernameFromId } from "@/utils/supabase/user";
 import { AuthUser } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
+import {cn} from "@/utils/utils";
 
 export default function Profile() {
     const [user, setUser] = useState<AuthUser & { username: string | null } | null>(null);

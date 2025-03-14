@@ -1,5 +1,7 @@
 import {redirect} from "next/navigation";
 import moment from "moment";
+import {ClassValue, clsx} from "clsx";
+import {twMerge} from "tailwind-merge";
 
 /**
  * Redirects to a specified path with an encoded message as a query parameter.
@@ -28,4 +30,8 @@ export function formatTime(date: Date) {
     } else {
         return input.format('YYYY-MM-DD HH:mm:ss');
     }
+}
+
+export function cn(...inputs: ClassValue[]) {
+    return twMerge(clsx(inputs));
 }
