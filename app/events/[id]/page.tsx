@@ -144,7 +144,7 @@ export default function Page({ params }: PageProps) {
     };
 
     const isInThisEvent = () => {
-        return eventData?.participants.some(u => u.user_id === user?.id) || false;
+        return eventData?.participants.some(u => u.auth_id === user?.id) || false;
     };
 
     const leaveOrJoinEvent = async () => {
@@ -247,11 +247,6 @@ export default function Page({ params }: PageProps) {
                         &nbsp;{new Date(eventData.end_date).toLocaleString()}
                     </p>
                     <p className={'flex flex-row items-center'}>
-                        <PersonStanding/>
-                        <strong> Þáttakendur: </strong>
-                        &nbsp;{eventData.participants.length}
-                    </p>
-                    <p className={'flex flex-row items-center'}>
                         <MapPin/>
                         <strong>Staðsetning:</strong>
                         &nbsp; {locationName}
@@ -259,8 +254,21 @@ export default function Page({ params }: PageProps) {
                     <p className={'flex flex-row items-center'}>
                         <Crown/>
                         <strong>Skipuleggjandi: </strong>
-                        &nbsp; {eventData.participants.}
+                        &nbsp; {eventData.participants.find(p => p.owner)?.name || "Enginn"}
                     </p>
+                    <div className={'flex flex-col'}>
+                        <div className={'flex flex-row items-center'}>
+                            <PersonStanding/>
+                            <strong> Þáttakendur: </strong>
+                            &nbsp;{eventData.participants.length}
+                        </div>
+
+                        <ul className={'ml-4'}>
+                            {eventData.participants.map((p, i) => (
+                                <li key={i}>- {p.name}</li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </section>
         </div>
