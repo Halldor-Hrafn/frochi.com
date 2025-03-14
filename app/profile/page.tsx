@@ -62,30 +62,6 @@ export default function Profile() {
         }
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            const res = await fetch(`/api/profile`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({...formData}),
-            });
-
-            if (!res.ok) {
-                throw new Error('Failed to update username');
-            }
-
-            const updatedEvent = await res.json();
-            console.log(updatedEvent.id);
-        } catch (e: any) {
-            throw new Error('Failed to update username');
-        } finally {
-            throw new Error('Failed to update username');
-        }
-    };
-
     return (
         <div>
             <p>{user ? user.username : 'Loading user data...'}</p>
