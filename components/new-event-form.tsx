@@ -1,5 +1,6 @@
 import {FormEvent, useEffect, useState} from "react";
 import {LatLng} from "leaflet";
+import {createClient} from "@/utils/supabase/client";
 
 /**
  *
@@ -34,6 +35,8 @@ function getLocationNameStr(osmData: any) {
 export default function NewEventForm({visible, pickedPos}: {visible: boolean, pickedPos?: LatLng}) {
     const [locationName, setLocationName] = useState("---");
 
+    const supabase = createClient();
+
     useEffect(() => {
         const fetchLocationName = async () => {
             if (!pickedPos) return;
@@ -54,8 +57,33 @@ export default function NewEventForm({visible, pickedPos}: {visible: boolean, pi
         fetchLocationName();
     }, [pickedPos]);
 
-    function onFormSubmit(e: FormEvent) {
+    async function onFormSubmit(e: FormEvent) {
         e.preventDefault();
+
+        const form = e.target;
+        let body = Object.fromEntries(new FormData(form as any));
+
+        const {data, error} = await supabase.auth.getUser();
+        if (error || !data) {
+            console.log("not logged in")
+            return;
+        }
+        body = {
+            ...body,
+            owner_id: data.user?.id,
+            lat: `${pickedPos?.lat}`,
+            lng: `${pickedPos?.lng}`,
+            icon: 'icon1'
+        }
+
+        const res = await fetch("/api/events", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+
     }
 
     return (
@@ -65,14 +93,14 @@ export default function NewEventForm({visible, pickedPos}: {visible: boolean, pi
                 <div className="flex flex-col">
                     <label htmlFor="title-inp">Nafn viðburðs</label>
                     <div className="bg-input w-full">
-                        <input className="w-full" type="text" id={'title-inp'} required/>
+                        <input className="w-full" name={'title'} type="text" id={'title-inp'} required/>
                     </div>  
                 </div>
 
                 <div className="flex flex-col">
                     <label htmlFor="desc-inp">Lýsing</label> 
                     <div className="bg-input w-full rounded">
-                        <input className="w-full" type="text" id={'desc-inp'} required/>
+                        <input className="w-full" name={'description'} type="text" id={'desc-inp'} required/>
                     </div>
                 </div>
 
@@ -84,7 +112,7 @@ export default function NewEventForm({visible, pickedPos}: {visible: boolean, pi
                 <div className="flex flex-col">
                     <label htmlFor="startdate-inp">Byrjar</label> 
                     <div className="bg-input w-full rounded">
-                        <input className="w-full" type="datetime-local" id={'startdate-inp'} required/>
+                        <input className="w-full" name={'start_date'} type="datetime-local" id={'startdate-inp'} required/>
                     </div>
                 </div>
 
@@ -92,7 +120,7 @@ export default function NewEventForm({visible, pickedPos}: {visible: boolean, pi
                 <div className="flex flex-col">
                     <label htmlFor="enddate-inp">Endar</label> 
                     <div className="bg-input w-full rounded">
-                        <input className="w-full" type="datetime-local" id={'enddate-inp'} required/>
+                        <input className="w-full" name={'end_date'} type="datetime-local" id={'enddate-inp'} required/>
                     </div>
                 </div>
 

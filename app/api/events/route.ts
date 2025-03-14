@@ -99,6 +99,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         ]);
 
     if (error) {
+        console.log(error);
         return NextResponse.json({
             error: "Something went wrong"
         }, {status: 500})
