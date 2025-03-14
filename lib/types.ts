@@ -7,7 +7,7 @@ export type Event = {
     end_date: Date;
     created_at: Date;
     lat: number;
-    lon: number;
+    lng: number;
     owner_id: string;
 }
 
@@ -21,7 +21,7 @@ export type Message = {
 }
 
 export type MarkerData = {
-    name: string;
+    title: string;
     lat: number;
     lng: number;
     icon: string;

@@ -1,9 +1,9 @@
-import L, { LatLng } from 'leaflet';
-import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import L, {LatLng, LeafletMouseEvent} from 'leaflet';
+import {useState, useEffect} from 'react';
+import {MapContainer, TileLayer, Marker, Popup, useMapEvents} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { createClient } from '@/utils/supabase/client';
-import { type MarkerData } from '@/lib/types';
+import {createClient} from '@/utils/supabase/client';
+import {type MarkerData} from '@/lib/types';
 
 function chooseIcon(icon: string) {
     switch (icon) {
@@ -30,10 +30,10 @@ function renderMarkers(data: MarkerData[]) {
     return data.map((marker, index) => {
         const icon = chooseIcon(marker.icon);
         return (
-            <Marker key={index} position={[marker.lat, marker.lng]} icon={icon}>
+            <Marker title={marker.title} key={index} position={[marker.lat, marker.lng]} icon={icon}>
                 <Popup>
                     <div>
-                        <h3>{marker.name}</h3>
+                        <h3>{marker.title}</h3>
                         <p>{marker.description}</p>
                     </div>
                 </Popup>
@@ -42,48 +42,39 @@ function renderMarkers(data: MarkerData[]) {
     })
 }
 
-function LocationMarker() {
-    const [markers, setMarkers] = useState<LatLng[]>([]);
+function MapEventHandler({onClick}: { onClick: (evt: LeafletMouseEvent) => void }) {
     const map = useMapEvents({
         click(e) {
-            const newMarker = e.latlng;
-            setMarkers([...markers, newMarker]);
-            console.log('Map clicked at:', newMarker);
+            onClick(e)
         },
     });
 
     return (
         <>
-            {markers.map((position, index) => (
-                <Marker key={index} position={position}>
-                    <Popup>You clicked here</Popup>
-                </Marker>
-            ))}
+
         </>
     );
 }
 
-export default function Map() {
-    const supabase = createClient();
+export type MapProps = {
+    className?: string;
+    data: MarkerData[];
+    width: string;
+    height: string;
+    onClick: (evt: LeafletMouseEvent) => void;
+}
 
-    const [data, setData] = useState<MarkerData[]>([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const data = await fetch('/api/events');
-            const json = await data.json();
-            setData(json);
-        }
-        fetchData();
-    }, []);
-
+export default function Map({className, data, width, height, onClick}: MapProps) {
     return (
-        <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: "50vh", width: "50vw" }}>
-            <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {renderMarkers(data)}
-            <LocationMarker />
-        </MapContainer>
+        <div className={`${className || ""}`}>
+            <MapContainer center={[64.10589550758499, -21.817974854458868]} zoom={12}
+                          style={{height: height, width: width}}>
+                <TileLayer
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                {renderMarkers(data)}
+                <MapEventHandler onClick={onClick}/>
+            </MapContainer>
+        </div>
     );
 }
