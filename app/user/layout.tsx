@@ -35,9 +35,14 @@ export default function Layout({
   }, [supabase]);
 
   return (
-    <div className="max-w-7xl flex flex-col gap-12 items-start m-10">
-      <div><p>{user?.username}</p></div>
-      {children}
-    </div>
+	<div className="max-w-7xl flex flex-col gap-12 items-start m-10">
+		<div>
+			<img 
+				src={user?.profile_image || "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images//default_profile_image.png"} 
+				alt="Profile Image" />
+			<p>{user?.username}</p>
+		</div>
+		{children}
+	</div>
   );
 }
