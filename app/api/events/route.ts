@@ -1,6 +1,30 @@
 import {NextRequest, NextResponse } from "next/server";
 import {createClient} from "@/utils/supabase/server";
 
+/**
+ * @returns [
+ *   {
+ *     id: 2,
+ *     created_at: '2025-03-14T11:50:58.184754+00:00',
+ *     user_id: 'f9466e20-dc88-4e39-aa1a-2d6ab67d2965',
+ *     event_id: '07593c78-8214-47e4-80fd-9b731d58232d'
+ *   }
+ * ]
+ */
+async function getEventParticipants(eventId: string): Promise<any> {
+    const supabase = await createClient();
+
+    const {data, error} = await supabase
+        .from("event_users")
+        .select("*", {count: 'exact'})
+        .eq('event_id', eventId);
+
+    if (error) {
+        return [];
+    }
+
+    return data;
+}
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
     const eventId = await req.nextUrl.searchParams.get("eventId")?.trim()
@@ -31,6 +55,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         if (!evt) {
             return NextResponse.json({message: "Event not found"}, {status: 404})
         }
+        evt.participants = await getEventParticipants(eventId);
         return NextResponse.json(evt);
     }
 
@@ -44,7 +69,14 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         }, {status: 500})
     }
 
-    return NextResponse.json(data);
+    return NextResponse.json(
+        await Promise.all(data.map(async evt => {
+            return {
+                ...evt,
+                participants: await getEventParticipants(evt.id)
+            }
+        }))
+    );
 }
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
