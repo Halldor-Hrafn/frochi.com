@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import type { MarkerData } from "@/lib/types";
 import { LatLng, LeafletMouseEvent } from "leaflet";
 import NewEventForm from "@/components/new-event-form";
-import { Button } from "@/components/ui/button";
+import {Button, buttonVariants} from "@/components/ui/button";
 import {CirclePlus} from "lucide-react";
 import {toast, Toaster} from "react-hot-toast";
+import {AuthUser} from "@supabase/supabase-js";
+import {createClient} from "@/utils/supabase/client";
 
 const Map = dynamic(() => import('@/components/map'), { ssr: false });
 
@@ -18,6 +20,7 @@ export default function Home() {
     const [currPos, setCurrPos] = useState<LatLng | undefined>(undefined);
     const [showEventForm, setShowEventForm] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const [user, setUser] = useState<AuthUser | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -29,7 +32,17 @@ export default function Home() {
             const json = await res.json();
             setData(json);
         };
+
+        const fetchUser = async () => {
+            const supabase = await createClient();
+            const {error, data} = await supabase.auth.getUser();
+            if (data && !error) {
+                setUser(data.user);
+            }
+        }
+
         fetchData();
+        fetchUser();
 
         const handleResize = () => setIsMobile(window.innerWidth <= MOBILE_VIEW_MAX_WIDTH);
         handleResize();
@@ -39,6 +52,7 @@ export default function Home() {
     }, []);
 
     function onMapClick(evt: LeafletMouseEvent) {
+        if (!user) return;
         const pos = evt.latlng;
         setCurrPos(pos);
 
@@ -84,7 +98,11 @@ export default function Home() {
                 <div className={`flex ${isMobile ? "flex-col" : "flex-row"} items-start w-full gap-4 mt-4`}>
                     <div className="flex flex-col w-full">
                         <h2 className="font-medium text-xl">Allir viðburðir</h2>
-                        <p>Ýttu á kortið til að búa til viðburð.</p>
+                        <p>{user?.id ? 'Ýttu á kortið til að búa til viðburð.' : (
+                            <a href={'/sign-up'} className={'hover:cursor-pointer hover:underline hover:text-secondary-foreground'}>
+                            Skráðu þig inn til að búa til viðburð
+                            </a>
+                        )}</p>
 
                         <Map
                             width={isMobile ? "90vw" : "70vw"}
