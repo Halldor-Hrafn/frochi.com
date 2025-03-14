@@ -8,7 +8,7 @@ import {EnvVarWarning} from "./env-var-warning";
 import {getProfileImageLinkFromId, getUsernameFromId} from "@/utils/supabase/user";
 import {ThemeSwitcher} from "@/components/theme-switcher";
 
-
+const DEFAULT_PFP_URL = "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"
 export default function Navbar() {
     return (
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
@@ -40,8 +40,8 @@ async function AuthButton() {
         data: {user},
     } = await supabase.auth.getUser();
 
-    const profile_image = user ? await getProfileImageLinkFromId(user.id)
-        : "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images//default_profile_image.png"
+    const profileImageUrl = user ? (await getProfileImageLinkFromId(user.id) || DEFAULT_PFP_URL)
+        : DEFAULT_PFP_URL
 
 
     const username = user ? await getUsernameFromId(user.id) : "Something has gone wrong"
@@ -88,11 +88,9 @@ async function AuthButton() {
             <a href="/user">
                 <div className="rounded">
                     <img
-                        src={profile_image || ""}
+                        src={profileImageUrl}
                         alt=""
-                        width="32"
-                        height="32"
-                        className="rounded-3xl"/>
+                        className="size-8 rounded-[50%]"/>
                 </div>
             </a>
             <form action={signOutAction}>
