@@ -1,4 +1,11 @@
 
+export type Participant = {
+    auth_id: string;
+    name: string;
+    owner: boolean;
+    icon_url: string;
+}
+
 export type Event = {
     id: string;
     title: string;
@@ -9,7 +16,7 @@ export type Event = {
     lat: number;
     lng: number;
     owner_id: string;
-    participants: {user_id: string}[]; // not in the schema
+    participants: Participant[]; // not in the schema
 }
 
 export type Message = {

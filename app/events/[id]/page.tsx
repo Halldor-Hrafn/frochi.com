@@ -259,7 +259,7 @@ export default function Page({ params }: PageProps) {
                     <p className={'flex flex-row items-center'}>
                         <Crown/>
                         <strong>Skipuleggjandi: </strong>
-                        &nbsp;[Implement Organizer Name]
+                        &nbsp; {eventData.participants.}
                     </p>
                 </div>
             </section>
