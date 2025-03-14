@@ -1,6 +1,6 @@
 "use client";
 import { createClient } from "@/utils/supabase/client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Message } from "@/lib/types";
 import ChatMessage from "@/components/chat-message";
 import { getUsernameFromId } from "@/utils/supabase/user";
@@ -14,6 +14,9 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
     const [error, setError] = useState<Error | null>(null);
     const [userInput, setUserInput] = useState<string>("");
     const supabase = createClient();
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+
 
     const addMessageToFeed = async (message: Message) => {
         const ownerName = await getUsernameFromId(message.owner_id);
@@ -105,9 +108,25 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
         }
     };
 
+    useEffect(() => {
+        if (scrollContainerRef.current) {
+            const wasAtBottom = scrollContainerRef.current.scrollTop == scrollContainerRef.current.scrollHeight - 328 || 
+                                scrollContainerRef.current.scrollTop == scrollContainerRef.current.scrollHeight - 260;
+
+            console.log(wasAtBottom, scrollContainerRef.current?.scrollTop, scrollContainerRef.current?.scrollHeight);
+
+            // If the user was at the bottom, scroll to the bottom after the message is added
+            if (wasAtBottom) {
+                setTimeout(() => {
+                    scrollContainerRef.current?.scrollTo(0, scrollContainerRef.current.scrollHeight);
+                }, 10);
+            }
+        }
+    }, [messages]); 
+
     return (
         <div className="border-2 border-gray-600 p-4">
-            <div className="overflow-y-scroll h-48 ">
+            <div ref={scrollContainerRef} className="overflow-y-scroll h-48 ">
                 <ul>
                     {messages.map((message, i) => (
                         <ChatMessage

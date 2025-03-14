@@ -10,7 +10,7 @@ export type ChatMessageProps = {
 export default function ChatMessage(props: ChatMessageProps) {
 
     return (
-        <div className={`hover:bg-gray-300 max-w-full ${props.className || ''}`}>
+        <div className={`hover:bg-accent max-w-full ${props.className || ''}`}>
             <p>{props.owner_name} {props.created_at.toLocaleTimeString()}</p>
             <p className={'text-xl text-wrap break-all'}>{props.message}</p>
         </div>
