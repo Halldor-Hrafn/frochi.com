@@ -5,7 +5,7 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
 import { EnvVarWarning } from "./env-var-warning";
-import { getUsernameFromId } from "@/utils/supabase/user";
+import { getProfileImageLinkFromId, getUsernameFromId } from "@/utils/supabase/user";
 
 
 export default function Navbar() {
@@ -34,7 +34,8 @@ async function AuthButton() {
     data: { user },
   } = await supabase.auth.getUser();
   
-  const username = user ? getUsernameFromId(user.id) : "Something has gone wrong"
+  const profile_image = user ? await getProfileImageLinkFromId(user.id) 
+                             : "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images//default_profile_image.png"
 
   if (!hasEnvVars) {
     return (
@@ -74,7 +75,16 @@ async function AuthButton() {
   }
   return user ? (
     <div className="flex  items-center gap-4">
-      <a href="/profile">{username}</a>
+      <a href="/user">
+        <div className="rounded">
+        <img 
+          src={profile_image} 
+          alt="" 
+          width="32"
+          height="32"
+          className="rounded-3xl"/>
+        </div>
+      </a>
       <form action={signOutAction}>
         <Button type="submit" variant={"outline"}>
           Sign out

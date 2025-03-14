@@ -57,6 +57,7 @@ export default function Profile() {
 
             const updatedEvent = await res.json();
             console.log(updatedEvent.id);
+            window.location.reload();
         } catch (e: any) {
             console.error('Error updating username:', e.message);
         }
@@ -64,8 +65,7 @@ export default function Profile() {
 
     return (
         <div>
-            <p>{user ? user.username : 'Loading user data...'}</p>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} action="/">
                 <input
                     type="hidden"
                     name="id"
