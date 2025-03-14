@@ -1,13 +1,7 @@
-import DeployButton from "@/components/deploy-button";
-import {EnvVarWarning} from "@/components/env-var-warning";
-import HeaderAuth from "@/components/navbar";
-import {ThemeSwitcher} from "@/components/theme-switcher";
-import {hasEnvVars} from "@/utils/supabase/check-env-vars";
-import {Geist} from "next/font/google";
-import {ThemeProvider} from "next-themes";
-import Link from "next/link";
+import { ThemeSwitcher } from "@/components/theme-switcher";
+import { Geist } from "next/font/google";
+import { ThemeProvider } from "next-themes";
 import "./globals.css";
-import {Button} from "@/components/ui/button";
 import Navbar from "@/components/navbar";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -15,9 +9,9 @@ const defaultUrl = process.env.VERCEL_URL
     : "http://localhost:3000";
 
 export const metadata = {
-    metadataBase: new URL(defaultUrl),
-    title: "Next.js and Supabase Starter Kit",
-    description: "The fastest way to build apps with Next.js and Supabase",
+  metadataBase: new URL(defaultUrl),
+  title: "Frochi!!!",
+  description: "The fastest way to Frochi around",
 };
 
 const geistSans = Geist({
