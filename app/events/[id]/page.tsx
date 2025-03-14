@@ -254,7 +254,7 @@ export default function Page({ params }: PageProps) {
                     )}
                 </div>
 
-                <EventChatRoom eventId={eventData.id} />
+                <EventChatRoom user={user} eventId={eventData.id} />
             </section>
             <section className={'event-section border-l-0 p-2'}>
                 <h2 className={'text-4xl border-b-2 border-b-gray-700 p-1'}>

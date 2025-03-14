@@ -5,15 +5,18 @@ import { Message } from "@/lib/types";
 import ChatMessage from "@/components/chat-message";
 import { getUsernameFromId } from "@/utils/supabase/user";
 import {SendHorizontal} from "lucide-react";
+import {AuthUser} from "@supabase/supabase-js";
 
 export type EventChatRoomProps = {
     eventId: string;
+    user: AuthUser | null;
 };
 
-export default function EventChatRoom({ eventId }: EventChatRoomProps) {
+export default function EventChatRoom({ eventId, user }: EventChatRoomProps) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [error, setError] = useState<Error | null>(null);
     const [userInput, setUserInput] = useState<string>("");
+
     const supabase = createClient();
     const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -145,7 +148,7 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
 
     return (
         <div className="flex flex-col justify-end border-2 border-gray-600 border-t-0 p-4 min-h-[450px] max-h-[450px]">
-            <div ref={scrollContainerRef} className="overflow-y-auto ">
+            <div ref={scrollContainerRef} className="overflow-y-auto mb-2">
                 <ul>
                     {messages.map((message, i) => (
                         <ChatMessage
@@ -163,8 +166,8 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
                 <input
                     type="text"
                     value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    placeholder="Type to send a message"
+                    onChange={(e) => !!user && setUserInput(e.target.value)}
+                    placeholder={user ? "Senda skilaboð" : "Skráðu þig inn til að senda skilaboð"}
                     onKeyDown={(e) => (e.key === "Enter" ? onMessageSend() : undefined)}
                     className="w-full bg-background placeholder-primary justify-end !border-0"
                 />
