@@ -1,7 +1,7 @@
 "use client"
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import type { MarkerData } from "@/lib/types";
 import { LatLng, LeafletMouseEvent } from "leaflet";
 import NewEventForm from "@/components/new-event-form";
@@ -16,7 +16,11 @@ const Map = dynamic(() => import('@/components/map'), { ssr: false });
 
 const MOBILE_VIEW_MAX_WIDTH = 768;
 
-export default function Home() {
+function Fallback() {
+    return <>loading...</>
+}
+
+const HomeComponent = () => {
     const [data, setData] = useState<MarkerData[]>([]);
     const [currPos, setCurrPos] = useState<LatLng | undefined>(undefined);
     const [showEventForm, setShowEventForm] = useState(false);
@@ -24,11 +28,12 @@ export default function Home() {
     const [user, setUser] = useState<AuthUser | null>(null);
 
     const searchParams = useSearchParams();
+
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch('/api/events');
             if (!res.ok) {
-                toast.error("Failed to fetch events.")
+                toast.error("Failed to fetch events.");
                 return;
             }
             const json = await res.json();
@@ -37,11 +42,11 @@ export default function Home() {
 
         const fetchUser = async () => {
             const supabase = await createClient();
-            const {error, data} = await supabase.auth.getUser();
+            const { error, data } = await supabase.auth.getUser();
             if (data && !error) {
                 setUser(data.user);
             }
-        }
+        };
 
         fetchData();
         fetchUser();
@@ -50,9 +55,8 @@ export default function Home() {
         handleResize();
         window.addEventListener("resize", handleResize);
 
-
         if (searchParams.get('toast')) {
-            toast.success(searchParams.get('toast'), {duration: 10_000});
+            toast.success(searchParams.get('toast'), { duration: 10_000 });
         }
 
         return () => window.removeEventListener("resize", handleResize);
@@ -83,7 +87,7 @@ export default function Home() {
 
     return (
         <>
-            <Toaster position={'top-right'}/>
+            <Toaster position={'top-right'} />
             <main className="flex flex-col items-center w-full min-w-screen max-w-screen mx-auto px-4">
                 {/*mobile only*/}
                 {isMobile && showEventForm && <NewEventForm visible={showEventForm} pickedPos={currPos} />}
@@ -93,7 +97,7 @@ export default function Home() {
                         {showEventForm ? "Loka viðburðaformi" :
                             (
                                 <div className={'flex items-center gap-2'}>
-                                    <CirclePlus/>
+                                    <CirclePlus />
                                     <p>Búa til viðburð</p>
                                 </div>
                             )
@@ -107,7 +111,7 @@ export default function Home() {
                         <h2 className="font-medium text-xl">Allir viðburðir</h2>
                         <p>{user?.id ? 'Ýttu á kortið til að búa til viðburð.' : (
                             <a href={'/sign-up'} className={'hover:cursor-pointer hover:underline hover:text-secondary-foreground'}>
-                            Skráðu þig inn til að búa til viðburð
+                                Skráðu þig inn til að búa til viðburð
                             </a>
                         )}</p>
 
@@ -125,5 +129,13 @@ export default function Home() {
                 </div>
             </main>
         </>
+    );
+};
+
+export default function Home() {
+    return (
+        <Suspense fallback={<Fallback />}>
+            <HomeComponent />
+        </Suspense>
     );
 }
