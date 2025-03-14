@@ -41,12 +41,12 @@ export default function RootLayout({
         >
           <main className="min-h-screen flex flex-col items-center">
               <Navbar />
-              <div className="relative flex min-h-screen flex-col">
+              <div className="relative flex min-h-screen flex-col ">
                   {children}
               </div>
 
               <footer
-                  className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
+                  className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-4">
                 <p>
                   Powered by {" "}
                   <a
