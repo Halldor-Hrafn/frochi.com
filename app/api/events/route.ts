@@ -11,20 +11,41 @@ import {createClient} from "@/utils/supabase/server";
  *   }
  * ]
  */
-async function getEventParticipants(eventId: string): Promise<any> {
+async function getEventParticipants(eventId: string, ownerId: string): Promise<any> {
     const supabase = await createClient();
 
-    const {data, error} = await supabase
+    const { data: participants, error: participantsError } = await supabase
         .from("event_users")
-        .select("*", {count: 'exact'})
+        .select("user_id", { count: 'exact' })
         .eq('event_id', eventId);
 
-    if (error) {
+    if (participantsError || !participants) {
         return [];
     }
 
-    return data;
+    const userIds = participants.map(p => p.user_id);
+    const { data: users, error: usersError } = await supabase
+        .from("users")
+        .select("auth_id, name, profile_image_link")
+        .in('auth_id', userIds);
+
+    if (usersError || !users) {
+        return [];
+    }
+
+    return users.map((usr: any) => {
+        const updatedusr = {
+            ...usr,
+            owner: (ownerId === usr.auth_id),
+            icon_url: usr.profile_image_link,
+        }
+
+        delete updatedusr.profile_image_link;
+        return updatedusr;
+    });
 }
+
+
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
     const eventId = await req.nextUrl.searchParams.get("eventId")?.trim()
@@ -55,7 +76,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         if (!evt) {
             return NextResponse.json({message: "Event not found"}, {status: 404})
         }
-        evt.participants = await getEventParticipants(eventId);
+        evt.participants = await getEventParticipants(eventId, evt.owner_id);
         return NextResponse.json(evt);
     }
 
@@ -73,7 +94,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         await Promise.all(data.map(async evt => {
             return {
                 ...evt,
-                participants: await getEventParticipants(evt.id)
+                participants: await getEventParticipants(evt.id, evt.owner_id)
             }
         }))
     );
