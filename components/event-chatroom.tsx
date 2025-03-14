@@ -7,6 +7,7 @@ import {getProfileImageLinkFromId, getUsernameFromId} from "@/utils/supabase/use
 import {SendHorizontal} from "lucide-react";
 import {AuthUser} from "@supabase/supabase-js";
 
+const DEFAULT_PFP_URL = "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"
 export type EventChatRoomProps = {
     eventId: string;
     user: AuthUser | null;
@@ -22,13 +23,14 @@ export default function EventChatRoom({ eventId, user }: EventChatRoomProps) {
 
     const addMessageToFeed = async (message: Message) => {
         const ownerName = await getUsernameFromId(message.owner_id);
-
+        const ownerIcon = await getProfileImageLinkFromId(message.owner_id);
         setMessages((prev) => [
             ...prev,
             {
                 ...message,
                 created_at: new Date(message.created_at),
                 owner_name: ownerName || "Unknown",
+                owner_icon_url: ownerIcon || DEFAULT_PFP_URL,
             },
         ]);
 
@@ -71,7 +73,7 @@ export default function EventChatRoom({ eventId, user }: EventChatRoomProps) {
                             ...msg,
                             created_at: new Date(msg.created_at),
                             owner_name: ownerName || "Unknown",
-                            owner_icon_url: ownerIcon || "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"
+                            owner_icon_url: ownerIcon || DEFAULT_PFP_URL
                         };
                     })
                 )
