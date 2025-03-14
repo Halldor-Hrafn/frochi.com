@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { Message } from "@/lib/types";
 import ChatMessage from "@/components/chat-message";
 import { getUsernameFromId } from "@/utils/supabase/user";
+import {SendHorizontal} from "lucide-react";
 
 export type EventChatRoomProps = {
     eventId: string;
@@ -141,8 +142,8 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
     }, [messages]); 
 
     return (
-        <div className="border-2 border-gray-600 p-4">
-            <div ref={scrollContainerRef} className="overflow-y-scroll h-48 ">
+        <div className="flex flex-col border-2 border-gray-600 border-t-0 p-4 max-h-[500px]">
+            <div ref={scrollContainerRef} className="overflow-y-scroll">
                 <ul>
                     {messages.map((message, i) => (
                         <ChatMessage
@@ -156,14 +157,18 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
                 </ul>
             </div>
 
-            <input
-                type="text"
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                placeholder="Type to send a message"
-                onKeyDown={(e) => (e.key === "Enter" ? onMessageSend() : undefined)}
-                className="border border-border rounded-sm p-2 w-full mt-4 bg-background placeholder-primary"
-            />
+            <div className={'flex items-center border border-border rounded-sm w-full'}>
+                <input
+                    type="text"
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                    placeholder="Type to send a message"
+                    onKeyDown={(e) => (e.key === "Enter" ? onMessageSend() : undefined)}
+                    className="w-full bg-background placeholder-primary justify-end !border-0"
+                />
+                <SendHorizontal className={'mr-2 hover:cursor-pointer'} />
+            </div>
+
         </div>
     );
 }

@@ -3,6 +3,11 @@
 import React, { useEffect, useState } from "react";
 import { Event } from '@/lib/types';
 import EventChatRoom from "@/components/event-chatroom";
+import {buttonVariants} from "@/components/ui/button";
+import {AuthUser} from "@supabase/supabase-js";
+import {createClient} from "@/utils/supabase/client";
+import {Pencil} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -15,6 +20,7 @@ export default function Page({ params }: PageProps) {
     const [eventId, setEventId] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [formData, setFormData] = useState<Partial<Event>>({});
+    const [user, setUser] = useState<AuthUser | null>(null);
 
     useEffect(() => {
         const unwrapParams = async () => {
@@ -42,7 +48,10 @@ export default function Page({ params }: PageProps) {
                     return;
                 }
 
+
                 const data = await res.json();
+                console.log('event id ', data.owner_id)
+
                 setEventData(data);
                 setFormData(data);
             } catch (e: any) {
@@ -54,6 +63,19 @@ export default function Page({ params }: PageProps) {
 
         fetchEventData();
     }, [eventId]);
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const supabase = await createClient();
+            const {error, data} = await supabase.auth.getUser();
+            if (data && !error) {
+                setUser(data.user);
+                console.log('usr id:', data.user.id)
+            }
+        }
+
+        fetchUser();
+    }, []);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -167,7 +189,13 @@ export default function Page({ params }: PageProps) {
                             <p className={'text-lg p-2'}>
                                 {eventData.description}
                             </p>
-                            <button onClick={() => setIsEditing(true)} className="bg-blue-500 text-white p-2 rounded">Update</button>
+                            <button
+                                onClick={() => setIsEditing(true)}
+                                className={cn(buttonVariants({variant: "default"}), `${eventData.owner_id !== user?.id ? '!hidden' : ''} flex flex-row items-center gap-1 ml-2`)}
+                            >
+                                <Pencil size={16}/>
+                                Breyta
+                            </button>
                         </>
                     )}
                 </div>
