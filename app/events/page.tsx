@@ -1,23 +1,22 @@
 'use client'
 import React, {useEffect, useState} from "react";
 import {Event} from '@/lib/types'
-import {redirect} from "next/navigation";
-import {createClient} from "@/utils/supabase/client";
 import EventEntry from "@/components/event-entry";
-import Map from "@/components/map";
+import {toast, Toaster} from "react-hot-toast";
 
 export default function Page() {
     const [events, setEvents] = useState<Event[]>([]);
 
     useEffect(() => {
         const fetchAllEvents = async () => {
-            const supabase = createClient();
-            const {data, error} = await supabase.from("events").select('*');
-            if (error || !data) {
-                console.error(error);
+            const res = await fetch('/api/events');
+
+            if (!res.ok) {
+                toast.error("Náði ekki að sækja viðburði :/")
                 return;
             }
 
+            const data = await res.json();
             setEvents(data.map((e: any) => {
                 return {
                     ...e,
@@ -33,7 +32,8 @@ export default function Page() {
 
     return (
         <div className="min-w-screen-lg mx-auto">
-            <div className="">
+            <Toaster position="top-right"/>
+            <div>
                 <div className={'flex items-center justify-center'}>
                     <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Events</h1>
                 </div>
