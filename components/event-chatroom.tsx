@@ -146,7 +146,7 @@ export default function EventChatRoom({ eventId }: EventChatRoomProps) {
                 onChange={(e) => setUserInput(e.target.value)}
                 placeholder="Type to send a message"
                 onKeyDown={(e) => (e.key === "Enter" ? onMessageSend() : undefined)}
-                className="border p-2 w-full mt-4"
+                className="border border-border rounded-sm p-2 w-full mt-4 bg-background placeholder-primary"
             />
         </div>
     );
