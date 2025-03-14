@@ -114,7 +114,7 @@ export default function NewEventForm({visible, pickedPos}: {visible: boolean, pi
 
                 <div className="flex flex-col">
                     <label htmlFor="location-inp">Staðsetning</label>
-                    <input className={'text-gray-400 !bg-gray-200 rounded'} type="text" id={'location-inp'} value={locationName} readOnly/>
+                    <input className={'text-gray-400 !bg-gray-200 focus:border-0 focus:ring-0 focus:outline-none rounded hover:cursor-no-drop'} type="text" id={'location-inp'} value={locationName} readOnly/>
                 </div>
 
                 <div className="flex flex-col">
