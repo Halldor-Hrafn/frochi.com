@@ -57,52 +57,73 @@ export default function Profile() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const link = await handleUpload();
-            if (!link) {
-                throw new Error('Failed to upload profile image');
+            let link = null;
+    
+            // If an image is provided, upload it
+            if (formData.profile_image) {
+                link = await handleUpload();
+                if (!link) {
+                    throw new Error('Failed to upload profile image');
+                }
             }
+    
+            // Update profile (whether with or without image)
             const res = await fetch(`/api/profile`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: formData.newName, profile_image_link: link }),
+                body: JSON.stringify({
+                    name: formData.newName,
+                    profile_image_link: link, // If no image, link will be null
+                }),
             });
+    
             if (!res.ok) {
-                throw new Error('Failed to update username');
+                throw new Error('Failed to update profile');
             }
-            
+    
+            // Success: Reload or handle success
             window.location.reload();
-            // const updatedEvent = await res.json();
+    
         } catch (e: any) {
-            console.error('Error updating username:', e.message);
+            console.error('Error updating profile:', e.message);
+            toast.error(e.message);  // Provide feedback to user
         }
     };
-
+    
     const handleUpload = async (): Promise<string | null> => {
         if (!formData.profile_image) {
-            toast.error("No image selected");
-            return null;
+            return null; // No image, so no need to upload
         }
-
+    
         const fileExt = formData.profile_image.name.split('.').pop();
         const fileName = `profile.${fileExt}`;
         const filePath = `${user?.id}/${fileName}${Date.now()}`;
-
-        
-
-        const { data, error } = await supabase.storage
-            .from("profile-images")
-            .upload(filePath, formData.profile_image, {
-            upsert: true});
-        
-        if (error) {
+    
+        try {
+            const { data, error } = await supabase.storage
+                .from("profile-images")
+                .upload(filePath, formData.profile_image, {
+                    upsert: true,
+                });
+    
+            if (error) {
+                throw new Error(`Error uploading file: ${error.message}`);
+            }
+    
+            if (data?.fullPath) {
+                return `https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/${data.fullPath}`;
+            }
+    
+            return null;
+        } catch (error: any) {
             console.error('Error uploading file:', error.message);
+            toast.error('Error uploading the image, please try again!');
             return null;
         }
-
-        return "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/" + data?.fullPath || null;
     };
+    
 
     return (
     <div>
@@ -111,11 +132,10 @@ export default function Profile() {
             <input
                 type="text"
                 name="newName"
-                placeholder="New Name"
+                placeholder="Nýtt nafn"
                 value={formData.newName}
                 onChange={handleNameInputChange}
                 className="mb-2"
-                required
             />
             <div className="w-full"> {/* Ensure the parent div takes the full width */}
                 {/* Custom button styled as a label with margin and full width */}
