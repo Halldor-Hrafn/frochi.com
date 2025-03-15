@@ -121,7 +121,7 @@ export default function Profile() {
                 {/* Custom button styled as a label with margin and full width */}
                 <label 
                     htmlFor="file-input" 
-                    className="bg-accent text-white py-2 px-4 rounded cursor-pointer hover:bg-accent-dark block w-full text-center"  // Added block to ensure label stretches full width
+                    className="bg-secondary text-white py-2 px-4 rounded cursor-pointer hover:bg-secondary/90 block w-full text-center"  // Added block to ensure label stretches full width
                 >
                     {formData.profile_image ? formData.profile_image.name : "Veldu mynd"}
                 </label>
