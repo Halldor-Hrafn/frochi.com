@@ -54,11 +54,11 @@ Skref 6.5 (valfrjálst): Virkja Raðsstýrðan Öryggisreglur
 
 Þetta skref er valfrjálst, en ef þú vilt geturðu virkjað Raðsstýrðar öryggisreglur. Farðu í `sql/policy.sql` og keyrðu fyrirspurnirnar þar og það ætti að vera tilbúið.
 
-## (Valfrjálst) Still resend.com fyrir Supabase
+## (Valfrjálst) Stilla resend.com fyrir Supabase
 
-Resend er SMTP þjónustuveita sem virkar mjög vel með Supabase, og við notuðum það í verkefnið okkar. Að nota það er hins vegar mjög valfrjálst en mjög mælt með.
+Resend er SMTP þjónustuveita sem virkar mjög vel með Supabase, og við notuðum það í verkefninu okkar. Að nota það er hins vegar valfrjálst en mælt með.
 
-Leiðbeiningar um hvernig á að stilla það eru utan viðfangsefni þessa README, en ég mun veita heimildir um hvernig á að gera það:
+Leiðbeiningar um hvernig á að setja það upp eru utan viðfangsefni þessa README, en ég mun veita heimildir um hvernig á að gera það:
 
 - [Kynning á Resend](https://resend.com/docs/dashboard/domains/introduction)
 - [Supabase með SMTP](https://resend.com/docs/send-with-supabase-smtp)
