@@ -35,7 +35,7 @@ export default async function Signup(props: {
                         className="border-border"
                         type="password"
                         name="password"
-                        placeholder="Your password"
+                        placeholder="Þitt lykilorð"
                         minLength={6}
                         required
                     />
