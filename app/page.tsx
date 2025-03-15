@@ -10,7 +10,7 @@ import {CirclePlus} from "lucide-react";
 import {toast, Toaster} from "react-hot-toast";
 import {AuthUser} from "@supabase/supabase-js";
 import {createClient} from "@/utils/supabase/client";
-import {useSearchParams} from "next/navigation";
+import {redirect, useSearchParams} from "next/navigation";
 
 const Map = dynamic(() => import('@/components/map'), { ssr: false });
 
@@ -103,7 +103,7 @@ const HomeComponent = () => {
                                     </a>
                                 )}</p>
                             </div>
-                            <Button onClick={() => setShowEventForm(!showEventForm)} className="mt-2">
+                            <Button onClick={() => !user ? redirect('/sign-up') : setShowEventForm(!showEventForm)} className="mt-2">
                                 {showEventForm ? "Loka viðburðaformi" :
                                     (
                                         <div className={'flex  gap-2'}>

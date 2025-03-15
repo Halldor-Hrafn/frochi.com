@@ -8,6 +8,8 @@ import { AuthUser } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
 import {CalendarDays, Crown, Hourglass, MapPin, Pencil, PersonStanding} from "lucide-react";
 import {getLocationNameStr} from "@/utils/utils";
+import {Toaster} from "react-hot-toast";
+import {redirect} from "next/navigation";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -148,6 +150,10 @@ export default function Page({ params }: PageProps) {
     };
 
     const leaveOrJoinEvent = async () => {
+        if (!user) {
+            return redirect('/sign-up');
+        }
+
         await fetch(`/api/events/${isInThisEvent() ? "leave" : "join"}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -169,7 +175,8 @@ export default function Page({ params }: PageProps) {
     }
 
     return (
-        <div className="flex flex-col lg:flex-row gap-6 min-h-screen p-6 w-screen">
+        <div className="flex flex-col-reverse lg:flex-row gap-6 min-h-screen p-6 w-screen">
+            <Toaster/>
             {/* left section */}
             <section className="flex-1 p-6 border border-muted-foreground rounded-lg shadow-sm">
                 <div className="mb-4">
