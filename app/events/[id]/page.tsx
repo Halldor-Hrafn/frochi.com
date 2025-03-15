@@ -265,7 +265,12 @@ export default function Page({ params }: PageProps) {
 
                         <ul className={'ml-4'}>
                             {eventData.participants.map((p, i) => (
-                                <li key={i}>- {p.name}</li>
+                                <li className={'flex items-center gap-2'} key={i}>
+                                    <a href={`/user/${p.auth_id}`}>
+                                        <img className={'size-4'} src={p.icon_url} alt="-"/>
+                                    </a>
+                                    {p.name}
+                                </li>
                             ))}
                         </ul>
                     </div>
