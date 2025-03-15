@@ -45,3 +45,19 @@ CREATE TABLE IF NOT EXISTS public.event_users (
     CONSTRAINT fk_event_id FOREIGN KEY (event_id) REFERENCES public.events (id) ON DELETE CASCADE,
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES auth.users (id) ON DELETE CASCADE
 ) TABLESPACE pg_default;
+
+-- Create the trigger function
+CREATE OR REPLACE FUNCTION add_event_user()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO public.event_users (event_id, user_id)
+    VALUES (NEW.id, NEW.owner_id);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the trigger
+CREATE TRIGGER after_event_insert
+AFTER INSERT ON public.events
+FOR EACH ROW
+EXECUTE FUNCTION add_event_user();
