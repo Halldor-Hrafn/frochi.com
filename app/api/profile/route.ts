@@ -28,11 +28,12 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
             const fileExt = profile_image.name
             const fileName = `profile.${fileExt}`;
             const filePath = `${userData.user.id}/${fileName}`
-            const { data: uploadData, error: uploadError } = await supabase.storage
-              .from("profile-images") 
-              .upload(filePath, profile_image, {
-                  cacheControl: '3600',  
-                  upsert: true
+            const { data: uploadData, error: uploadError } = await supabase
+                    .storage
+                    .from("profile-images") 
+                    .upload(filePath, profile_image, {
+                    cacheControl: '3600',  
+                    upsert: true
               });
       
             if (uploadError) {

@@ -37,6 +37,7 @@ export default function Profile() {
 
     const handleNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        console.log("Set name")
         setFormData((prevState) => ({
             ...prevState,
             [name]: value,
