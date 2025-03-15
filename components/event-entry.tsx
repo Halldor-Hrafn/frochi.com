@@ -10,7 +10,11 @@ export default function EventEntry({event}: { event: Event }) {
                 <h2 className={'border-b-2 border-b-gray-700 text-2xl'}>
                     {event.title}
                     <span className={'text-sm color-foreground px-2'}>
-                        {event.start_date.toLocaleDateString()} to {event.end_date.toLocaleDateString()}
+                        {event.end_date.getTime() < new Date().getTime() ? (
+                            <p className={'text-red-400'}>Búið</p>
+                        ) : (
+                            <p>{event.start_date.toLocaleDateString()} til {event.end_date.toLocaleDateString()}</p>
+                        )}
                     </span>
                     <span className={'text-sm color-foreground px-2'}>
                         {event.participants.length} þáttakendur

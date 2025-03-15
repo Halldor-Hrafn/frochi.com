@@ -20,7 +20,7 @@ export default function Navbar() {
                     </Link>
 
                     <Button asChild size="sm" variant={"outline"}>
-                        <Link href="/events">Events</Link>
+                        <Link href="/events">Atburðir</Link>
                     </Button>
                 </div>
                 <div className="flex gap-5 items-center font-semibold">
@@ -40,8 +40,8 @@ async function AuthButton() {
         data: {user},
     } = await supabase.auth.getUser();
 
-    const profileImageUrl = user ? (await getProfileImageLinkFromId(user.id) || DEFAULT_PFP_URL)
-        : DEFAULT_PFP_URL
+    const profile_image = user ? (await getProfileImageLinkFromId(user.id) || DEFAULT_PFP_URL)
+        : DEFAULT_PFP_URL;
 
 
     const username = user ? await getUsernameFromId(user.id) : "Something has gone wrong"
@@ -66,7 +66,7 @@ async function AuthButton() {
                             disabled
                             className="opacity-75 cursor-none pointer-events-none"
                         >
-                            <Link href="/sign-in">Sign in</Link>
+                            <Link href="/sign-in">Skrá inn</Link>
                         </Button>
                         <Button
                             asChild
@@ -75,7 +75,7 @@ async function AuthButton() {
                             disabled
                             className="opacity-75 cursor-none pointer-events-none"
                         >
-                            <Link href="/sign-up">Sign up</Link>
+                            <Link href="/sign-up">Stofna aðgang</Link>
                         </Button>
                     </div>
                 </div>
@@ -88,9 +88,10 @@ async function AuthButton() {
             <a href="/user">
                 <div className="rounded">
                     <img
-                        src={profileImageUrl}
+                        src={profile_image}
                         alt=""
-                        className="size-8 rounded-[50%]"/>
+                        className="rounded-[50%] size-8 aspect-auto"
+                    />
                 </div>
             </a>
             <form action={signOutAction}>
@@ -102,10 +103,10 @@ async function AuthButton() {
     ) : (
         <div className="flex gap-2">
             <Button asChild size="sm" variant={"outline"}>
-                <Link href="/sign-in">Sign in</Link>
+                <Link href="/sign-in">Skrá inn</Link>
             </Button>
             <Button asChild size="sm" variant={"default"}>
-                <Link href="/sign-up">Sign up</Link>
+                <Link href="/sign-up">Stofna aðgang</Link>
             </Button>
         </div>
     );

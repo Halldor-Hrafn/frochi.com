@@ -2,13 +2,6 @@ PATCH http://localhost:3000/api/profile
 Content-Type: application/json
 
 {
-    "eventId": "0748f0c4-539e-46d9-964c-ed866408f0c2",
-    "title": "Test Event Updated",
-    "description": "This is a test event updated",
-    "start_date": "2021-01-01T00:00:00.000Z",
-    "end_date": "2021-01-01T23:59:59.999Z",
-    "owner_id": "1b5b48bd-0bf6-4c55-bd29-96c58b4a487f",
-    "lat": 51.5074,
-    "lng": -0.1278,
-    "icon": "icon2"
+    name: "name",
+    profile_image_link: "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png",
 }
