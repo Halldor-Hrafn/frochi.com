@@ -12,7 +12,7 @@ export type ChatMessageProps = {
 export default function ChatMessage(props: ChatMessageProps) {
 
     return (
-        <div className={`hover:bg-accent max-w-full ${props.className || ''}`}>
+        <div className={`hover:bg-muted max-w-full ${props.className || ''}`}>
             <div className="flex items-center gap-2">
                 <img className={'size-8 rounded-[50%]'} src={props.owner_icon_url} alt="pfp"/>
                 <p>{props.owner_name} <span className={'text-muted-foreground text-sm'}>{formatTime(props.created_at)}</span> </p>

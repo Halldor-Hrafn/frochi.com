@@ -122,7 +122,7 @@ export default function Page() {
             <Toaster position="top-right"/>
             <div>
                 <div className={'flex items-center justify-center'}>
-                    <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Events</h1>
+                    <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Atburðir</h1>
                 </div>
                 <div className="flex mt-4 ml-4 items-start gap-2 w-screen justify-start">
                     <Button variant={"default"} className="">
@@ -132,7 +132,7 @@ export default function Page() {
                 </div>
                 <ul className='min-w-[70px] min-h-[200px] grid grid-cols-1 md:grid-cols-3 gap-2 pt-8'>
                     {filteredEvents.map(event => (
-                        <div key={event.id} className="m-2 rounded-sm hover:bg-gray-200 h-full">
+                        <div key={event.id} className="m-2 rounded-sm hover:bg-muted h-full">
                             <EventEntry key={event.id} event={event} />
                         </div>
                     ))}

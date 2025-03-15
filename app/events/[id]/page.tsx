@@ -210,7 +210,7 @@ export default function Page({ params }: PageProps) {
                     ) : (
                         <div>
                             <h1 className="text-3xl font-bold border-b pb-2">{eventData.title}</h1>
-                            <p className="text-gray-700 mt-2">{eventData.description}</p>
+                            <p className="text-secondary-foreground mt-2">{eventData.description}</p>
                             {eventData.owner_id === user?.id && (
                                 <button
                                     onClick={() => setIsEditing(true)}
