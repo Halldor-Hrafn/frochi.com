@@ -30,6 +30,7 @@ export type Message = {
 }
 
 export type MarkerData = {
+    id: string | null; // event id
     title: string;
     lat: number;
     lng: number;
