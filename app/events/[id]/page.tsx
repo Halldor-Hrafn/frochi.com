@@ -75,7 +75,7 @@ export default function Page({ params }: PageProps) {
             try {
                 const res = await fetch(`/api/events/?eventId=${eventId}`);
                 if (!res.ok) {
-                    throw new Error("Event not found");
+                    throw new Error("Atburður fannst ekki");
                 }
 
                 const data = await res.json();
@@ -204,7 +204,7 @@ export default function Page({ params }: PageProps) {
                                 onChange={handleInputChange}
                             />
                             <Button type="submit">
-                                Save Changes
+                                Vista breytingar
                             </Button>
                         </form>
                     ) : (
@@ -217,7 +217,7 @@ export default function Page({ params }: PageProps) {
                                     className="flex items-center gap-2 mt-4 px-3 py-2 text-sm font-semibold border rounded-md"
                                 >
                                     <Pencil size={16} />
-                                    Edit Event
+                                    Breyta
                                 </button>
                             )}
                         </div>
@@ -234,7 +234,7 @@ export default function Page({ params }: PageProps) {
 
             {/* right section */}
             <section className="w-full lg:w-1/3 p-6 border border-muted-foreground rounded-lg shadow-sm">
-                <h2 className="text-xl font-semibold border-b pb-2">Event Information</h2>
+                <h2 className="text-xl font-semibold border-b pb-2">Upplýsingar</h2>
                 <div className="mt-4 space-y-2">
                     <p className={'flex flex-row items-center'}>
                         <CalendarDays/>
