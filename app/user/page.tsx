@@ -72,8 +72,8 @@ export default function Profile() {
                 throw new Error('Failed to update username');
             }
             
-            const updatedEvent = await res.json();
             window.location.reload();
+            // const updatedEvent = await res.json();
         } catch (e: any) {
             console.error('Error updating username:', e.message);
         }
@@ -114,15 +114,29 @@ export default function Profile() {
                 placeholder="New Name"
                 value={formData.newName}
                 onChange={handleNameInputChange}
+                className="mb-2"
                 required
             />
-            <input
-                type="file"
-                name="profile_image"
-                placeholder=""
-                onChange={handleProfileImageInputChange}
-            />
-            <Button type="submit">send</Button>
+            <div className="w-full"> {/* Ensure the parent div takes the full width */}
+                {/* Custom button styled as a label with margin and full width */}
+                <label 
+                    htmlFor="file-input" 
+                    className="bg-accent text-white py-2 px-4 rounded cursor-pointer hover:bg-accent-dark block w-full text-center"  // Added block to ensure label stretches full width
+                >
+                    {formData.profile_image ? formData.profile_image.name : "Veldu mynd"}
+                </label>
+
+                {/* Hidden file input */}
+                <input
+                    id="file-input"
+                    type="file"
+                    name="profile_image"
+                    onChange={handleProfileImageInputChange}
+                    style={{ display: 'none' }} // Hide the default file input
+                />
+            </div>
+
+            <Button type="submit" className="mt-2">Uppfæra</Button>
         </form>
     </div>
     );
