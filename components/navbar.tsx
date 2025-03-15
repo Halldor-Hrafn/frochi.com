@@ -20,7 +20,7 @@ export default function Navbar() {
                     </Link>
 
                     <Button asChild size="sm" variant={"outline"}>
-                        <Link href="/events">Events</Link>
+                        <Link href="/events">Atburðir</Link>
                     </Button>
                 </div>
                 <div className="flex gap-5 items-center font-semibold">
@@ -66,7 +66,7 @@ async function AuthButton() {
                             disabled
                             className="opacity-75 cursor-none pointer-events-none"
                         >
-                            <Link href="/sign-in">Sign in</Link>
+                            <Link href="/sign-in">Skrá inn</Link>
                         </Button>
                         <Button
                             asChild
@@ -75,7 +75,7 @@ async function AuthButton() {
                             disabled
                             className="opacity-75 cursor-none pointer-events-none"
                         >
-                            <Link href="/sign-up">Sign up</Link>
+                            <Link href="/sign-up">Stofna aðgang</Link>
                         </Button>
                     </div>
                 </div>
@@ -102,10 +102,10 @@ async function AuthButton() {
     ) : (
         <div className="flex gap-2">
             <Button asChild size="sm" variant={"outline"}>
-                <Link href="/sign-in">Sign in</Link>
+                <Link href="/sign-in">Skrá inn</Link>
             </Button>
             <Button asChild size="sm" variant={"default"}>
-                <Link href="/sign-up">Sign up</Link>
+                <Link href="/sign-up">Stofna aðgang</Link>
             </Button>
         </div>
     );
