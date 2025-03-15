@@ -30,6 +30,7 @@ export default function EventChatRoom({ eventId, user }: EventChatRoomProps) {
                 ...message,
                 created_at: new Date(message.created_at),
                 owner_name: ownerName || "Unknown",
+                owner_id: message.owner_id,
                 owner_icon_url: ownerIcon || DEFAULT_PFP_URL,
             },
         ]);
@@ -164,6 +165,7 @@ export default function EventChatRoom({ eventId, user }: EventChatRoomProps) {
                             message={message.message}
                             owner_name={message.owner_name}
                             owner_icon_url={message.owner_icon_url}
+                            owner_id={message.owner_id}
                         />
                     ))}
                 </ul>

@@ -40,8 +40,8 @@ async function AuthButton() {
         data: {user},
     } = await supabase.auth.getUser();
 
-    const profileImageUrl = user ? (await getProfileImageLinkFromId(user.id) || DEFAULT_PFP_URL)
-        : DEFAULT_PFP_URL
+    const profile_image = user ? (await getProfileImageLinkFromId(user.id) || DEFAULT_PFP_URL)
+        : DEFAULT_PFP_URL;
 
 
     const username = user ? await getUsernameFromId(user.id) : "Something has gone wrong"
@@ -88,9 +88,10 @@ async function AuthButton() {
             <a href="/user">
                 <div className="rounded">
                     <img
-                        src={profileImageUrl}
+                        src={profile_image}
                         alt=""
-                        className="size-8 rounded-[50%]"/>
+                        className="rounded-[50%] size-8 aspect-auto"
+                    />
                 </div>
             </a>
             <form action={signOutAction}>
