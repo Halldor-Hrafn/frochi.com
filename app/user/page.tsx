@@ -1,6 +1,6 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 import { getProfileImageLinkFromId, getUsernameFromId } from "@/utils/supabase/user";
 import { AuthUser } from "@supabase/supabase-js";
@@ -13,6 +13,7 @@ export default function Profile() {
     const [formData, setFormData] = useState({
         id: '',
         newName: '',
+        profile_image: "",
     });
     const supabase = createClient();
 
@@ -35,13 +36,25 @@ export default function Profile() {
         fetchUser();
     }, [supabase]);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({
             ...prevState,
             [name]: value,
         }));
     };
+
+    const handleProfileImageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, files } = e.target;
+        if (files && files[0]){
+            const file = files[0]
+            setFormData((prevState) => ({
+                ...prevState,
+                [name]: file,
+            }));
+        }
+    };
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -51,12 +64,12 @@ export default function Profile() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: formData.newName }),
+                body: JSON.stringify({ name: formData.newName, profile_image: formData.profile_image }),
             });
             if (!res.ok) {
                 throw new Error('Failed to update username');
             }
-
+            
             const updatedEvent = await res.json();
             window.location.reload();
         } catch (e: any) {
@@ -67,7 +80,7 @@ export default function Profile() {
     return (
     <div>
         <UserProfile username={user?.username ?? "Unknown User"} profile_image={user?.profile_image ?? "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"} />
-        <form onSubmit={handleSubmit} action="/">
+        <form onSubmit={handleSubmit} action="/" className="grid">
             <input
                 type="hidden"
                 name="id"
@@ -78,10 +91,16 @@ export default function Profile() {
                 name="newName"
                 placeholder="New Name"
                 value={formData.newName}
-                onChange={handleInputChange}
+                onChange={handleNameInputChange}
                 required
             />
-            <button type="submit">send</button>
+            <input
+                type="file"
+                name="profile_image"
+                placeholder=""
+                onChange={handleProfileImageInputChange}
+            />
+            <Button type="submit">send</Button>
         </form>
     </div>
     );

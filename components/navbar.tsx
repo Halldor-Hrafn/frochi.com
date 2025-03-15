@@ -9,7 +9,6 @@ import {getProfileImageLinkFromId, getUsernameFromId} from "@/utils/supabase/use
 import {ThemeSwitcher} from "@/components/theme-switcher";
 
 const DEFAULT_PFP_URL = "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"
-const DEFAULT_PFP_URL = "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"
 export default function Navbar() {
     return (
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">

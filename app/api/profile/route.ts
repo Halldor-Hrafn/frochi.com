@@ -3,7 +3,7 @@ import {createClient} from "@/utils/supabase/server";
 
 export async function PATCH(req: NextRequest): Promise<NextResponse> {
     try {
-        const { name } = await req.json(); // We don't need auth_id if it's not provided
+        const { name, profile_image } = await req.json();
         const supabase = await createClient();
         // Ensure the required fields are provided
         if (!name) {
@@ -22,11 +22,34 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
     
         const uid = userData.user.id;
 
+
+        console.log(profile_image)
+        if (profile_image) {
+            const fileExt = profile_image.name
+            const fileName = `profile.${fileExt}`;
+            const filePath = `${userData.user.id}/${fileName}`
+            const { data: uploadData, error: uploadError } = await supabase.storage
+              .from("profile-images") 
+              .upload(filePath, profile_image, {
+                  cacheControl: '3600',  
+                  upsert: true
+              });
+      
+            if (uploadError) {
+              console.error("Upload Error:", uploadError);
+              return NextResponse.json(
+                { error: "Failed to upload image." },
+                { status: 500 }
+              );
+            }
+        }
+
         // Update the name in the users table
         const { data, error } = await supabase
             .from("users")
             .update({
                 name,
+                profile_image,
             })
             .eq("auth_id", uid)
             .select("*");
