@@ -1,14 +1,12 @@
 "use client";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 import { getProfileImageLinkFromId, getUsernameFromId } from "@/utils/supabase/user";
 import { AuthUser } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
-import {cn} from "@/utils/utils";
 import UserProfile from "@/components/profile";
 import toast from "react-hot-toast";
-
 
 export default function Profile() {
     const [user, setUser] = useState<AuthUser & { username: string | null, profile_image: string } | null>(null);
@@ -39,7 +37,6 @@ export default function Profile() {
 
     const handleNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        console.log("Set name")
         setFormData((prevState) => ({
             ...prevState,
             [name]: value,
@@ -57,16 +54,19 @@ export default function Profile() {
         }
     };
 
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            const link = await handleUpload();
+            if (!link) {
+                throw new Error('Failed to upload profile image');
+            }
             const res = await fetch(`/api/profile`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: formData.newName, profile_image: formData.profile_image }),
+                body: JSON.stringify({ name: formData.newName, profile_image_link: link }),
             });
             if (!res.ok) {
                 throw new Error('Failed to update username');
@@ -79,21 +79,30 @@ export default function Profile() {
         }
     };
 
-    const handleUpload = async () => {
+    const handleUpload = async (): Promise<string | null> => {
         if (!formData.profile_image) {
-            toast.error("Enginn mynd valinn")
+            toast.error("No image selected");
+            return null;
         }
 
-        const fileExt = formData.profile_image?.name
+        const fileExt = formData.profile_image.name.split('.').pop();
         const fileName = `profile.${fileExt}`;
-        const filePath = `${user?.id}/${fileName}`
+        const filePath = `${user?.id}/${fileName}${Date.now()}`;
 
-        const {data, error} = await supabase.storage
-            .from("profile-images")
-            .upload(filePath, formData.profile_image?)
         
-        console.log(data, error)
-    }
+
+        const { data, error } = await supabase.storage
+            .from("profile-images")
+            .upload(filePath, formData.profile_image, {
+            upsert: true});
+        
+        if (error) {
+            console.error('Error uploading file:', error.message);
+            return null;
+        }
+
+        return "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/" + data?.fullPath || null;
+    };
 
     return (
     <div>

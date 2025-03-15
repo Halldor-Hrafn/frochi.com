@@ -9,7 +9,7 @@ export default function UserProfile({ username, profile_image }: { username: str
                         src={profile_image} 
                         alt="Profile Image" 
                         width="200px"
-                        className="max-w-full rounded-[50%]"/>
+                        className="max-w-full rounded-[50%] size-[200px]"/>
                     </div>
                     <h2 className="text-2xl">{username}</h2>
                 </div>

@@ -90,9 +90,8 @@ async function AuthButton() {
                     <img
                         src={profile_image}
                         alt=""
-                        width="32"
-                        height="32"
-                        className="rounded-[50%]"/>
+                        className="rounded-[50%] size-8 aspect-auto"
+                        />
                 </div>
             </a>
             <form action={signOutAction}>
