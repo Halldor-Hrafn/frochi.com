@@ -7,12 +7,14 @@ import { AuthUser } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import {cn} from "@/utils/utils";
 import UserProfile from "@/components/profile";
+import toast from "react-hot-toast";
+
 
 export default function Profile() {
     const [user, setUser] = useState<AuthUser & { username: string | null, profile_image: string } | null>(null);
     const [formData, setFormData] = useState({
         newName: '',
-        profile_image: File,
+        profile_image: null as File | null,
     });
     
     const supabase = createClient();
@@ -76,6 +78,22 @@ export default function Profile() {
             console.error('Error updating username:', e.message);
         }
     };
+
+    const handleUpload = async () => {
+        if (!formData.profile_image) {
+            toast.error("Enginn mynd valinn")
+        }
+
+        const fileExt = formData.profile_image?.name
+        const fileName = `profile.${fileExt}`;
+        const filePath = `${user?.id}/${fileName}`
+
+        const {data, error} = await supabase.storage
+            .from("profile-images")
+            .upload(filePath, formData.profile_image?)
+        
+        console.log(data, error)
+    }
 
     return (
     <div>
