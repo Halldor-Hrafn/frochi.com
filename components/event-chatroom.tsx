@@ -153,7 +153,7 @@ export default function EventChatRoom({ eventId, user }: EventChatRoomProps) {
     }, [messages]); 
 
     return (
-        <div className="flex flex-col justify-end border-2 border-gray-600 border-t-0 p-4 min-h-[450px] max-h-[450px]">
+        <div className="flex flex-col justify-end border-t mt-2 p-4 min-h-[550px] max-h-[550px]">
             <div ref={scrollContainerRef} className="overflow-y-auto ">
                 <ul>
                     {messages.map((message, i) => (
@@ -176,7 +176,7 @@ export default function EventChatRoom({ eventId, user }: EventChatRoomProps) {
                     onChange={(e) => !!user && setUserInput(e.target.value)}
                     placeholder={user ? "Senda skilaboð" : "Skráðu þig inn til að senda skilaboð"}
                     onKeyDown={(e) => (e.key === "Enter" ? onMessageSend() : undefined)}
-                    className="w-full bg-background placeholder-primary justify-end !border-0"
+                    className="w-full bg-background placeholder-primary justify-end focus:border-0 focus:ring-0 focus:outline-none"
                 />
                 <SendHorizontal onClick={onMessageSend} className={'mr-2 hover:cursor-pointer'} />
             </div>
