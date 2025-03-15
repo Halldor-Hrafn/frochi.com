@@ -11,10 +11,10 @@ import UserProfile from "@/components/profile";
 export default function Profile() {
     const [user, setUser] = useState<AuthUser & { username: string | null, profile_image: string } | null>(null);
     const [formData, setFormData] = useState({
-        id: '',
         newName: '',
-        profile_image: "",
+        profile_image: File,
     });
+    
     const supabase = createClient();
 
     useEffect(() => {
@@ -27,7 +27,6 @@ export default function Profile() {
                 // Set formData's id with the user's ID
                 setFormData((prevState) => ({
                     ...prevState,
-                    id: data.user.id,
                     newName: username || '', // Set newName if available, else empty string
                 }));
             }
@@ -81,11 +80,6 @@ export default function Profile() {
     <div>
         <UserProfile username={user?.username ?? "Unknown User"} profile_image={user?.profile_image ?? "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"} />
         <form onSubmit={handleSubmit} action="/" className="grid">
-            <input
-                type="hidden"
-                name="id"
-                value={formData.id}
-            />
             <input
                 type="text"
                 name="newName"

@@ -49,7 +49,6 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
             .from("users")
             .update({
                 name,
-                profile_image,
             })
             .eq("auth_id", uid)
             .select("*");
