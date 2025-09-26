@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS public.users (
     id UUID DEFAULT gen_random_uuid(),
     auth_id UUID NOT NULL,
     name TEXT NOT NULL,
-    profile_image_link TEXT NOT NULL,
+    profile_image_link TEXT NOT NULL DEFAULT 'https://mgrvjblhrrdqenzoigif.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png',
 
     CONSTRAINT pk_users PRIMARY KEY (id),
     CONSTRAINT fk_auth_id FOREIGN KEY (auth_id) REFERENCES auth.users (id) ON DELETE CASCADE
