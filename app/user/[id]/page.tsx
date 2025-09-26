@@ -45,7 +45,7 @@ export default function Profile({ params }: ProfilePageProps) {
 
     return (
         <div>
-            <UserProfile username={user?.username ?? "Unknown User"} profile_image={user?.profile_image ?? "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"} />
+            <UserProfile username={user?.username ?? "Unknown User"} profile_image={user?.profile_image ?? "https://mgrvjblhrrdqenzoigif.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"} />
         </div>
     );
 }
