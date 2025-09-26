@@ -1,11 +1,11 @@
-import {NextRequest, NextResponse} from "next/server";
-import {createClient} from "@/utils/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/utils/supabase/server";
 
 
 async function isUserInEvent(eventId: string, uid: string): Promise<boolean> {
     const supabase = await createClient();
 
-    const {data, error} = await supabase
+    const { data, error } = await supabase
         .from('event_users')
         .select('*')
         .eq('event_id', eventId)
@@ -21,20 +21,20 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const body = await req.json();
     const { event_id } = body;
 
-    const {data, error} = await supabase.auth.getUser();
+    const { data, error } = await supabase.auth.getUser();
 
     if (error || !data.user) {
         console.error(error);
-        return NextResponse.json({error:"Smth went ronn:" + error?.message}, {status: 500});
+        return NextResponse.json({ error: "Smth went ronn:" + error?.message }, { status: 500 });
     }
 
     const uid = data.user.id;
 
     if (await isUserInEvent(event_id, uid)) {
-        return NextResponse.json({error: "You are already in this event"}, {status: 400});
+        return NextResponse.json({ error: "You are already in this event" }, { status: 400 });
 
     }
-    const {data: insertData, error: insertError} = await supabase
+    const { data: insertData, error: insertError } = await supabase
         .from('event_users')
         .insert(
             [
@@ -47,9 +47,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     if (insertError) {
         console.error(error);
-        return NextResponse.json({error: "Failed to join"}, {status: 500})
+        return NextResponse.json({ error: "Failed to join" }, { status: 500 })
     }
 
 
-    return NextResponse.json({message: "success"});
+    return NextResponse.json({ message: "success" });
 }

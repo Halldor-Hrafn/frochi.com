@@ -1,8 +1,8 @@
-import {signInAction} from "@/app/actions";
-import {FormMessage, Message} from "@/components/form-message";
-import {SubmitButton} from "@/components/submit-button";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
+import { signInAction } from "@/app/actions";
+import { FormMessage, Message } from "@/components/form-message";
+import { SubmitButton } from "@/components/submit-button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
 export default async function Login(props: { searchParams: Promise<Message> }) {
@@ -18,7 +18,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
             </p>
             <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
                 <Label htmlFor="email">Netfang</Label>
-                <Input className="border-border" name="email" placeholder="you@example.com" required/>
+                <Input className="border-border" name="email" placeholder="you@example.com" required />
                 <div className="flex justify-between items-center">
                     <Label htmlFor="password">Lykilorð</Label>
                     <Link
@@ -38,7 +38,7 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
                 <SubmitButton pendingText="Skráir inn..." formAction={signInAction}>
                     Skrá inn
                 </SubmitButton>
-                <FormMessage message={searchParams}/>
+                <FormMessage message={searchParams} />
             </div>
         </form>
     );

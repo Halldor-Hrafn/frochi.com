@@ -1,7 +1,7 @@
-import {redirect} from "next/navigation";
+import { redirect } from "next/navigation";
 import moment from "moment";
-import {ClassValue, clsx} from "clsx";
-import {twMerge} from "tailwind-merge";
+import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 /**
  * Redirects to a specified path with an encoded message as a query parameter.

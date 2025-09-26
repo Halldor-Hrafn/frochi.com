@@ -1,10 +1,10 @@
 'use client'
-import React, {useEffect, useState} from "react";
-import {Event} from '@/lib/types'
+import React, { useEffect, useState } from "react";
+import { Event } from '@/lib/types'
 import EventEntry from "@/components/event-entry";
-import {toast, Toaster} from "react-hot-toast";
-import {Button} from "@/components/ui/button";
-import {CirclePlus} from "lucide-react";
+import { toast, Toaster } from "react-hot-toast";
+import { Button } from "@/components/ui/button";
+import { CirclePlus } from "lucide-react";
 import SearchBar from "@/components/search-bar";
 
 
@@ -119,7 +119,7 @@ export default function Page() {
 
     return (
         <div className="min-w-screen-lg mx-auto">
-            <Toaster position="top-right"/>
+            <Toaster position="top-right" />
             <div>
                 <div className={'flex items-center justify-center'}>
                     <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Atburðir</h1>

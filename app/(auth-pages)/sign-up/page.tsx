@@ -1,8 +1,8 @@
-import {signUpAction} from "@/app/actions";
-import {FormMessage, Message} from "@/components/form-message";
-import {SubmitButton} from "@/components/submit-button";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
+import { signUpAction } from "@/app/actions";
+import { FormMessage, Message } from "@/components/form-message";
+import { SubmitButton } from "@/components/submit-button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
 export default async function Signup(props: {
@@ -12,7 +12,7 @@ export default async function Signup(props: {
     if ("message" in searchParams) {
         return (
             <div className="w-full flex-1 flex items-center h-screen sm:max-w-md justify-center gap-2 p-4">
-                <FormMessage message={searchParams}/>
+                <FormMessage message={searchParams} />
             </div>
         );
     }
@@ -29,7 +29,7 @@ export default async function Signup(props: {
                 </p>
                 <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
                     <Label htmlFor="email">Netfang</Label>
-                    <Input className="border-border" name="email" placeholder="you@example.com" required/>
+                    <Input className="border-border" name="email" placeholder="you@example.com" required />
                     <Label htmlFor="password">Lykilorð</Label>
                     <Input
                         className="border-border"
@@ -42,7 +42,7 @@ export default async function Signup(props: {
                     <SubmitButton formAction={signUpAction} pendingText="Býr til aðgang....">
                         Stofna aðgang
                     </SubmitButton>
-                    <FormMessage message={searchParams}/>
+                    <FormMessage message={searchParams} />
                 </div>
             </form>
         </>

@@ -1,5 +1,5 @@
-import {NextRequest, NextResponse } from "next/server";
-import {createClient} from "@/utils/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/utils/supabase/server";
 
 /**
  * @returns [
@@ -53,7 +53,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const supabase = await createClient();
 
     if (eventId) {
-        const {error, data} = await supabase
+        const { error, data } = await supabase
             .from("events")
             .select("*")
             .eq("id", eventId);
@@ -64,30 +64,30 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
             if (error.code === '22P02') {
                 return NextResponse.json({
                     error: "Invalid uuid"
-                }, {status: 400});
+                }, { status: 400 });
             }
 
             return NextResponse.json({
                 error: "Something went wrong"
-            }, {status: 500});
+            }, { status: 500 });
         }
 
         const evt = data[0];
         if (!evt) {
-            return NextResponse.json({message: "Event not found"}, {status: 404})
+            return NextResponse.json({ message: "Event not found" }, { status: 404 })
         }
         evt.participants = await getEventParticipants(eventId, evt.owner_id);
         return NextResponse.json(evt);
     }
 
-    const {error, data} = await supabase
+    const { error, data } = await supabase
         .from("events")
         .select("*")
 
     if (error) {
         return NextResponse.json({
             error: "Something went wrong"
-        }, {status: 500})
+        }, { status: 500 })
     }
 
     return NextResponse.json(
@@ -124,7 +124,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         console.log(error);
         return NextResponse.json({
             error: "Something went wrong"
-        }, {status: 500})
+        }, { status: 500 })
     }
 
     return NextResponse.json(data[0]);
@@ -151,7 +151,7 @@ export async function PATCH(req: NextRequest): Promise<NextResponse> {
     if (error) {
         return NextResponse.json({
             error: "Something went wrong"
-        }, {status: 500})
+        }, { status: 500 })
     }
 
     return NextResponse.json(data);
@@ -169,7 +169,7 @@ export async function DELETE(req: NextRequest): Promise<NextResponse> {
     if (error) {
         return NextResponse.json({
             error: "Something went wrong"
-        }, {status: 500})
+        }, { status: 500 })
     }
 
     return NextResponse.json(data);

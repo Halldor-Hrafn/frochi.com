@@ -1,9 +1,9 @@
-import {createClient} from "@/utils/supabase/client";
+import { createClient } from "@/utils/supabase/client";
 
 
 export async function getUsernameFromId(authId: string): Promise<string | null> {
     const supabase = createClient();
-    const {error, data} = await supabase
+    const { error, data } = await supabase
         .from("users")
         .select("name")
         .eq("auth_id", authId);
@@ -15,7 +15,7 @@ export async function getUsernameFromId(authId: string): Promise<string | null> 
 
 export async function getProfileImageLinkFromId(authId: string): Promise<string> {
     const supabase = createClient();
-    const {error, data} = await supabase
+    const { error, data } = await supabase
         .from("users")
         .select("profile_image_link")
         .eq("auth_id", authId);

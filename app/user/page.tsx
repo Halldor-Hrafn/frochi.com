@@ -14,7 +14,7 @@ export default function Profile() {
         newName: '',
         profile_image: null as File | null,
     });
-    
+
     const supabase = createClient();
 
     useEffect(() => {
@@ -45,7 +45,7 @@ export default function Profile() {
 
     const handleProfileImageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, files } = e.target;
-        if (files && files[0]){
+        if (files && files[0]) {
             const file = files[0]
             setFormData((prevState) => ({
                 ...prevState,
@@ -71,7 +71,7 @@ export default function Profile() {
             if (!res.ok) {
                 throw new Error('Failed to update username');
             }
-            
+
             window.location.reload();
             // const updatedEvent = await res.json();
         } catch (e: any) {
@@ -89,13 +89,14 @@ export default function Profile() {
         const fileName = `profile.${fileExt}`;
         const filePath = `${user?.id}/${fileName}${Date.now()}`;
 
-        
+
 
         const { data, error } = await supabase.storage
             .from("profile-images")
             .upload(filePath, formData.profile_image, {
-            upsert: true});
-        
+                upsert: true
+            });
+
         if (error) {
             console.error('Error uploading file:', error.message);
             return null;
@@ -105,39 +106,39 @@ export default function Profile() {
     };
 
     return (
-    <div>
-        <UserProfile username={user?.username ?? "Unknown User"} profile_image={user?.profile_image ?? "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"} />
-        <form onSubmit={handleSubmit} action="/" className="grid">
-            <input
-                type="text"
-                name="newName"
-                placeholder="New Name"
-                value={formData.newName}
-                onChange={handleNameInputChange}
-                className="mb-2"
-                required
-            />
-            <div className="w-full"> {/* Ensure the parent div takes the full width */}
-                {/* Custom button styled as a label with margin and full width */}
-                <label 
-                    htmlFor="file-input" 
-                    className="bg-secondary text-white py-2 px-4 rounded cursor-pointer hover:bg-secondary/90 block w-full text-center"  // Added block to ensure label stretches full width
-                >
-                    {formData.profile_image ? formData.profile_image.name : "Veldu mynd"}
-                </label>
-
-                {/* Hidden file input */}
+        <div>
+            <UserProfile username={user?.username ?? "Unknown User"} profile_image={user?.profile_image ?? "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png"} />
+            <form onSubmit={handleSubmit} action="/" className="grid">
                 <input
-                    id="file-input"
-                    type="file"
-                    name="profile_image"
-                    onChange={handleProfileImageInputChange}
-                    style={{ display: 'none' }} // Hide the default file input
+                    type="text"
+                    name="newName"
+                    placeholder="New Name"
+                    value={formData.newName}
+                    onChange={handleNameInputChange}
+                    className="mb-2"
+                    required
                 />
-            </div>
+                <div className="w-full"> {/* Ensure the parent div takes the full width */}
+                    {/* Custom button styled as a label with margin and full width */}
+                    <label
+                        htmlFor="file-input"
+                        className="bg-secondary text-white py-2 px-4 rounded cursor-pointer hover:bg-secondary/90 block w-full text-center"  // Added block to ensure label stretches full width
+                    >
+                        {formData.profile_image ? formData.profile_image.name : "Veldu mynd"}
+                    </label>
 
-            <Button type="submit" className="mt-2">Uppfæra</Button>
-        </form>
-    </div>
+                    {/* Hidden file input */}
+                    <input
+                        id="file-input"
+                        type="file"
+                        name="profile_image"
+                        onChange={handleProfileImageInputChange}
+                        style={{ display: 'none' }} // Hide the default file input
+                    />
+                </div>
+
+                <Button type="submit" className="mt-2">Uppfæra</Button>
+            </form>
+        </div>
     );
 }

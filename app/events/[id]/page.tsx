@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { Event } from '@/lib/types';
 import EventChatRoom from "@/components/event-chatroom";
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { AuthUser } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
-import {CalendarDays, Crown, Hourglass, MapPin, Pencil, PersonStanding} from "lucide-react";
-import {getLocationNameStr} from "@/utils/utils";
-import {Toaster} from "react-hot-toast";
-import {redirect} from "next/navigation";
+import { CalendarDays, Crown, Hourglass, MapPin, Pencil, PersonStanding } from "lucide-react";
+import { getLocationNameStr } from "@/utils/utils";
+import { Toaster } from "react-hot-toast";
+import { redirect } from "next/navigation";
 
 type PageProps = {
     params: Promise<{ id: string }>;
@@ -60,7 +60,7 @@ export default function Page({ params }: PageProps) {
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isUserInThisEvent, setIsUserInThisEvent] = useState<boolean>(false);
     const [locationName, setLocationName] = useState<string>("---");
-    const [eventOwner, setEventOwner] = useState<{name: string, id: string} | null>(null);
+    const [eventOwner, setEventOwner] = useState<{ name: string, id: string } | null>(null);
 
     useEffect(() => {
         const unwrapParams = async () => {
@@ -163,7 +163,7 @@ export default function Page({ params }: PageProps) {
     };
 
     if (loading) {
-        return <PageSkeleton/>
+        return <PageSkeleton />
     }
 
     if (!eventData) {
@@ -176,7 +176,7 @@ export default function Page({ params }: PageProps) {
 
     return (
         <div className="flex flex-col-reverse lg:flex-row gap-6 min-h-screen p-6 w-screen">
-            <Toaster/>
+            <Toaster />
             {/* left section */}
             <section className="flex-1 p-6 border border-muted-foreground rounded-lg shadow-sm">
                 <div className="mb-4">
@@ -244,28 +244,28 @@ export default function Page({ params }: PageProps) {
                 <h2 className="text-xl font-semibold border-b pb-2">Upplýsingar</h2>
                 <div className="mt-4 space-y-2">
                     <p className={'flex flex-row items-center'}>
-                        <CalendarDays/>
+                        <CalendarDays />
                         <strong>Byrjar: </strong>
                         &nbsp;{new Date(eventData.start_date).toLocaleString()}
                     </p>
                     <p className={'flex flex-row items-center'}>
-                        <Hourglass/>
+                        <Hourglass />
                         <strong>Endar: </strong>
                         &nbsp;{new Date(eventData.end_date).toLocaleString()}
                     </p>
                     <p className={'flex flex-row items-center'}>
-                        <MapPin/>
+                        <MapPin />
                         <strong>Staðsetning:</strong>
                         &nbsp; {locationName}
                     </p>
                     <p className={'flex flex-row items-center'}>
-                        <Crown/>
+                        <Crown />
                         <strong>Skipuleggjandi: </strong>
                         &nbsp; {eventData.participants.find(p => p.owner)?.name || "Enginn"}
                     </p>
                     <div className={'flex flex-col'}>
                         <div className={'flex flex-row items-center'}>
-                            <PersonStanding/>
+                            <PersonStanding />
                             <strong> Þáttakendur: </strong>
                             &nbsp;{eventData.participants.length}
                         </div>
@@ -274,7 +274,7 @@ export default function Page({ params }: PageProps) {
                             {eventData.participants.map((p, i) => (
                                 <li className={'flex items-center gap-2'} key={i}>
                                     <a href={`/user/${p.auth_id}`}>
-                                        <img className={'size-4'} src={p.icon_url} alt="-"/>
+                                        <img className={'size-4'} src={p.icon_url} alt="-" />
                                     </a>
                                     {p.name}
                                 </li>
