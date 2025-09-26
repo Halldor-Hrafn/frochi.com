@@ -4,6 +4,7 @@ import {MapContainer, TileLayer, Marker, Popup, useMapEvents} from 'react-leafle
 import 'leaflet/dist/leaflet.css';
 import {createClient} from '@/utils/supabase/client';
 import {type MarkerData} from '@/lib/types';
+import { Button } from './ui/button';
 
 function chooseIcon(icon: string) {
     switch (icon) {
@@ -27,6 +28,7 @@ function chooseIcon(icon: string) {
 }
 
 function renderMarkers(data: MarkerData[]) {
+    console.log(data)
     return data.map((marker, index) => {
         const icon = chooseIcon(marker.icon);
         return (
@@ -35,6 +37,7 @@ function renderMarkers(data: MarkerData[]) {
                     <div>
                         <h3>{marker.title}</h3>
                         <p>{marker.description}</p>
+                        {marker.id ? <a href={"/events/" + marker?.id}>Opna</a> : ""}
                     </div>
                 </Popup>
             </Marker>

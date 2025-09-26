@@ -74,6 +74,7 @@ const HomeComponent = () => {
         setData(old => [
             ...old,
             {
+                id: null,
                 lng: pos.lng,
                 lat: pos.lat,
                 icon: "icon2",
