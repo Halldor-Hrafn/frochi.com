@@ -10,7 +10,15 @@ export default function EventEntry({event}: { event: Event }) {
             className={'p-4 h-full rounded'}
         >
             <div>
-                <Image src={(event as any).image_url || DEFAULT_EVENT_IMAGE_URL} alt={"event cover photo"} width={200} height={100}/>
+                <div className="relative w-full h-64">
+                    <Image
+                        src={(event as any).image_url || DEFAULT_EVENT_IMAGE_URL}
+                        alt="event cover photo"
+                        fill
+                        className="object-cover rounded-md"
+                    />
+                </div>
+
                 <div className="flex items-center justify-between">
                     <div>
                         <a href={`/events/${event.id}`}>
