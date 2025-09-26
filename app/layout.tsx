@@ -37,7 +37,7 @@ export default function RootLayout({
                 >
                     <main className="min-h-screen flex flex-col items-center">
                         <Navbar />
-                        <div className="relative flex min-h-screen flex-col ">
+                        <div className="relative flex min-h-screen flex-col">
                             {children}
                         </div>
 

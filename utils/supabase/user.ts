@@ -19,8 +19,8 @@ export async function getProfileImageLinkFromId(authId: string): Promise<string>
         .from("users")
         .select("profile_image_link")
         .eq("auth_id", authId);
-    console.log(data, error)
-    if (error) return "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png";
+
+        if (error) return "https://emqvjwtowgujddqurtnb.supabase.co/storage/v1/object/public/profile-images/default_profile_image.png";
 
     return data?.map(d => d.profile_image_link)[0];
 }

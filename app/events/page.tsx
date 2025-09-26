@@ -6,6 +6,7 @@ import { toast, Toaster } from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
 import SearchBar from "@/components/search-bar";
+import EventFilterBar from "@/components/event-filterbar";
 
 
 /**
@@ -118,25 +119,28 @@ export default function Page() {
     }
 
     return (
-        <div className="min-w-screen-lg mx-auto">
+        <div className="w-screen mx-auto">
             <Toaster position="top-right" />
-            <div>
-                <div className={'flex items-center justify-center'}>
-                    <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Atburðir</h1>
+            <div className="flex">
+                <EventFilterBar/>
+                <div className="w-full">
+                    <div className={'flex items-center justify-center'}>
+                        <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Atburðir</h1>
+                    </div>
+                    <div className="flex mt-4 ml-4 items-start gap-2 justify-start">
+                        <Button variant={"default"} className="">
+                            <a href="/?toast=ýttu á kortið til að velja staðsetningu fyrir viðburð"><CirclePlus className="mr-1" /></a>
+                        </Button>
+                        <SearchBar onQueryChange={onQueryChange} />
+                    </div>
+                    <ul className='min-w-[70px] min-h-[200px]  grid grid-cols-1 md:grid-cols-3 gap-2 pt-8'>
+                        {filteredEvents.map(event => (
+                            <div key={event.id} className="m-2 rounded-sm h-full">
+                                <EventEntry key={event.id} event={event} />
+                            </div>
+                        ))}
+                    </ul>
                 </div>
-                <div className="flex mt-4 ml-4 items-start gap-2 w-screen justify-start">
-                    <Button variant={"default"} className="">
-                        <a href="/?toast=ýttu á kortið til að velja staðsetningu fyrir viðburð"><CirclePlus className="mr-1" /></a>
-                    </Button>
-                    <SearchBar onQueryChange={onQueryChange} />
-                </div>
-                <ul className='min-w-[70px] min-h-[200px] grid grid-cols-1 md:grid-cols-3 gap-2 pt-8'>
-                    {filteredEvents.map(event => (
-                        <div key={event.id} className="m-2 rounded-sm hover:bg-muted h-full">
-                            <EventEntry key={event.id} event={event} />
-                        </div>
-                    ))}
-                </ul>
             </div>
         </div>
     )
