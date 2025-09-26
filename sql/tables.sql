@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS public.users (
     id UUID DEFAULT gen_random_uuid(),
     auth_id UUID NOT NULL,
     name TEXT NOT NULL,
+    profile_image_link TEXT NOT NULL,
 
     CONSTRAINT pk_users PRIMARY KEY (id),
     CONSTRAINT fk_auth_id FOREIGN KEY (auth_id) REFERENCES auth.users (id) ON DELETE CASCADE
