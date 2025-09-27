@@ -1,30 +1,37 @@
-import {useEffect, useState} from "react";
-import {Search} from "lucide-react";
-import {cn} from "@/utils/utils";
-import {buttonVariants} from "@/components/ui/button";
-
+import { useEffect, useState } from "react"
+import { Search } from "lucide-react"
+import { cn } from "@/utils/utils"
 
 export type SearchBarProps = {
-    onQueryChange: (query: string) => void;
+    onQueryChange: (query: string) => void
 }
 
 export default function SearchBar(props: SearchBarProps) {
-    const [query, setQuery] = useState("");
+    const [query, setQuery] = useState("")
 
     useEffect(() => {
-        props.onQueryChange(query);
-    }, [query]);
+        props.onQueryChange(query)
+    }, [query])
 
     return (
-        <div className={cn(buttonVariants({variant: 'default'}), '!pl-2 flex items-center border border-gray-900 max-w-sm')}>
-            <Search/>
+        <div
+            className={cn(
+                "flex items-center gap-2 w-full max-w-sm",
+                "rounded-md border border-border bg-background px-2 ",
+                "text-sm text-foreground shadow-sm"
+            )}
+        >
+            <Search className="h-4 w-4 text-muted-foreground shrink-0" />
             <input
-                className={cn('!border-0 focus:border-0 focus:ring-0 focus:outline-none px-2 py-1')}
+                className={cn(
+                    "!border-0 flex-1 bg-transparent placeholder-muted-foreground",
+                    "focus:outline-none focus:ring-0"
+                )}
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder={'Leita...'}
+                placeholder="Leita..."
             />
         </div>
-    );
+    )
 }

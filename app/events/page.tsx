@@ -119,9 +119,9 @@ export default function Page() {
     }
 
     return (
-        <div className="w-screen mx-auto">
+        <div className="h-screen w-screen mx-auto">
             <Toaster position="top-right" />
-            <div className="flex">
+            <div className="h-full flex">
                 <EventFilterBar/>
                 <div className="w-full">
                     <div className={'flex items-center justify-center'}>
@@ -131,11 +131,10 @@ export default function Page() {
                         <Button variant={"default"} className="">
                             <a href="/?toast=ýttu á kortið til að velja staðsetningu fyrir viðburð"><CirclePlus className="mr-1" /></a>
                         </Button>
-                        <SearchBar onQueryChange={onQueryChange} />
                     </div>
-                    <ul className='min-w-[70px] min-h-[200px]  grid grid-cols-1 md:grid-cols-3 gap-2 pt-8'>
+                    <ul className='min-w-[70px] min-h-[200px]  grid grid-cols-1 md:grid-cols-4 gap-2 pt-8'>
                         {filteredEvents.map(event => (
-                            <div key={event.id} className="m-2 rounded-sm h-full">
+                            <div key={event.id} className="rounded-sm h-full">
                                 <EventEntry key={event.id} event={event} />
                             </div>
                         ))}
