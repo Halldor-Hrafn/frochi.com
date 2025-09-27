@@ -10,7 +10,7 @@ export default function EventFilterBar() {
     return (
         <aside className="w-64 shrink-0 border-r border-border p-4 flex flex-col gap-6">
             <h2 className="text-lg font-semibold text-foreground border-b border-border pb-2">
-                Filter Events
+                Þrengja niðurstöður
             </h2>
             <SearchBar onQueryChange={(e) => undefined} />
 

@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import { Event } from '@/lib/types'
 import EventEntry from "@/components/event-entry";
 import { toast, Toaster } from "react-hot-toast";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { CirclePlus } from "lucide-react";
 import SearchBar from "@/components/search-bar";
 import EventFilterBar from "@/components/event-filterbar";
+import { cn } from "@/utils/utils";
 
 
 /**
@@ -121,18 +122,23 @@ export default function Page() {
     return (
         <div className="h-screen w-screen mx-auto">
             <Toaster position="top-right" />
-            <div className="h-full flex">
+            <div className="h-full flex gap-2">
                 <EventFilterBar/>
                 <div className="w-full">
                     <div className={'flex items-center justify-center'}>
                         <h1 className="text-5xl pt-10 pb-4 text-center border-b border-b-primary px-4 ">Atburðir</h1>
                     </div>
-                    <div className="flex mt-4 ml-4 items-start gap-2 justify-start">
-                        <Button variant={"default"} className="">
-                            <a href="/?toast=ýttu á kortið til að velja staðsetningu fyrir viðburð"><CirclePlus className="mr-1" /></a>
-                        </Button>
+
+                    <div className="flex justify-end px-2">
+                        <a
+                            href="/?toast=ýttu á kortið til að velja staðsetningu fyrir viðburð"
+                            className={cn(buttonVariants({"variant": "default"}),"w-10 h-10 rounded-full flex items-center justify-center p-0")}
+                        >
+                            <CirclePlus/>
+                        </a>
+
                     </div>
-                    <ul className='min-w-[70px] min-h-[200px]  grid grid-cols-1 md:grid-cols-4 gap-2 pt-8'>
+                    <ul className='min-w-[70px] min-h-[200px] grid grid-cols-1 md:grid-cols-4 gap-2 pt-2'>
                         {filteredEvents.map(event => (
                             <div key={event.id} className="rounded-sm h-full">
                                 <EventEntry key={event.id} event={event} />
